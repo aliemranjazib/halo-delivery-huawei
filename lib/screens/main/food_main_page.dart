@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-// import 'package:geolocator/geolocator.dart';
 import 'package:haloapp/components/custom_flushbar.dart';
 import 'package:haloapp/components/search_bar_input.dart';
 import 'package:haloapp/components_new/food_type_container.dart';
@@ -36,7 +35,8 @@ import 'package:haloapp/utils/debouncer.dart';
 import 'package:haloapp/utils/services/location_service.dart';
 import 'package:haloapp/utils/services/pop_with_result_service.dart';
 import 'package:haloapp/components/model_progress_hud.dart';
-import 'package:huawei_location/location/location.dart';
+// import 'package:huawei_location/location/location.dart';
+import 'package:huawei_location/huawei_location.dart';
 
 class FoodMainPage extends StatefulWidget {
   static const String id = 'foodMainPage';
@@ -80,7 +80,7 @@ class _FoodMainPageState extends State<FoodMainPage> {
       _showSpinner = true;
     });
     print('getting location');
-    Location position = await LocationService.getLastKnownLocation();
+    Location position = await LocationService().getCurrentLocation();
 
     bool locationPermissionGranted = await LocationService().checkPermission();
     if (!locationPermissionGranted) {
@@ -169,7 +169,6 @@ class _FoodMainPageState extends State<FoodMainPage> {
       setState(() {
         _shops = data;
         _allShops = data;
-
         _filters = data
             .fold<List<String>>(
               ["All"],
@@ -177,6 +176,7 @@ class _FoodMainPageState extends State<FoodMainPage> {
             )
             .toSet()
             .toList();
+        // print("shops : ${_shops[0].shopDeliveryFee}");
       });
     } catch (e) {
       print(e.toString());
@@ -284,7 +284,7 @@ class _FoodMainPageState extends State<FoodMainPage> {
     });
   }
 
-  Widget renderFilter() {
+  renderFilter() {
     return SizedBox(
       height: 23,
       child: ListView.builder(
@@ -295,7 +295,7 @@ class _FoodMainPageState extends State<FoodMainPage> {
         itemCount: _filters.length,
         itemBuilder: (BuildContext context, int index) => GestureDetector(
           onTap: () {
-            print(" ${_filters[index]}");
+            print(_filters[index]);
             if (_filters[index] == "All")
               _shops = _allShops;
             else
@@ -402,218 +402,175 @@ class _FoodMainPageState extends State<FoodMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    return FoodOrderModel().foodOption.shopType == "donation"
-        ? Scaffold(
-            appBar: AppBar(
-              backgroundColor: Colors.white,
-              centerTitle: true,
-              leading: IconButton(
-                icon: arrowBack,
-                onPressed: () => {Navigator.pop(context)},
-              ),
-              title: Text(
-                AppTranslations.of(context).text('charity'),
-                style: kAppBarTextStyle,
-              ),
-            ),
-            body: ModalProgressHUD(
-              inAsyncCall: _showSpinner,
-              child: ListView.builder(
-                itemCount: _shops.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return ShopCard(
-                    shopType: FoodOrderModel().foodOption.shopType,
-                    shop: _shops[index],
-                    callbackMethod: () {
-                      getNearbyShopList();
-                      Future.delayed(Duration(seconds: 2), () {
-                        print("3434 ${_shops[index].city}");
-                      });
-                    },
-                  );
-                },
-              ),
-            ),
-          )
-        : Scaffold(
-            body: ModalProgressHUD(
-              inAsyncCall: _showSpinner,
-              child: SafeArea(
-                top: false,
-                child: RefreshIndicator(
-                  onRefresh: listOnRefresh,
-                  child: CustomScrollView(
-                    slivers: [
-                      SliverPersistentHeader(
-                        pinned: true,
-                        delegate: CustomSliverAppBarFoodDelegate(
-                          expandedHeight:
-                              MediaQuery.of(context).padding.top + 150,
-                          topSafeArea: MediaQuery.of(context).padding.top + 100,
-                          topChild: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.center,
+    return Scaffold(
+      body: ModalProgressHUD(
+        inAsyncCall: _showSpinner,
+        child: SafeArea(
+          top: false,
+          child: RefreshIndicator(
+            onRefresh: listOnRefresh,
+            child: CustomScrollView(
+              slivers: [
+                SliverPersistentHeader(
+                  pinned: true,
+                  delegate: CustomSliverAppBarFoodDelegate(
+                    expandedHeight: MediaQuery.of(context).padding.top + 150,
+                    topSafeArea: MediaQuery.of(context).padding.top + 100,
+                    topChild: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Container(
+                          child: Row(
                             children: [
-                              Container(
-                                child: Row(
-                                  children: [
-                                    CustomBackButton(),
-                                    Expanded(
-                                      child: GestureDetector(
-                                        onTap: () async {
-                                          setState(() {
-                                            _showSpinner = true;
-                                          });
-                                          await Navigator.pushNamed(
-                                              context, FindAddressPage.id,
-                                              arguments: {'popMode': true});
-                                          FoodOrderModel().clearFoodOrderData();
+                              CustomBackButton(),
+                              Expanded(
+                                child: GestureDetector(
+                                  onTap: () async {
+                                    setState(() {
+                                      _showSpinner = true;
+                                    });
+                                    await Navigator.pushNamed(
+                                        context, FindAddressPage.id,
+                                        arguments: {'popMode': true});
+                                    FoodOrderModel().clearFoodOrderData();
 
-                                          if (FoodOrderModel()
-                                                  .getDeliveryAddress()
-                                                  ?.lat !=
-                                              null)
-                                            _currentAddress = FoodOrderModel()
-                                                .getDeliveryAddress();
-                                          await initAddress();
-                                          await HomeNetworking.initAppConfig({
-                                            "latitude": FoodOrderModel()
+                                    if (FoodOrderModel()
+                                            .getDeliveryAddress()
+                                            ?.lat !=
+                                        null)
+                                      _currentAddress =
+                                          FoodOrderModel().getDeliveryAddress();
+                                    await initAddress();
+                                    await HomeNetworking.initAppConfig({
+                                      "latitude": FoodOrderModel()
+                                          .getDeliveryAddress()
+                                          ?.lat,
+                                      "longitude": FoodOrderModel()
+                                          .getDeliveryAddress()
+                                          ?.lng,
+                                    });
+                                    setState(() {
+                                      _showSpinner = false;
+                                    });
+                                    // editAddress();
+                                  },
+                                  child: Text(
+                                    (FoodOrderModel()
                                                 .getDeliveryAddress()
-                                                ?.lat,
-                                            "longitude": FoodOrderModel()
-                                                .getDeliveryAddress()
-                                                ?.lng,
-                                          });
-                                          setState(() {
-                                            _showSpinner = false;
-                                          });
-                                          // editAddress();
-                                        },
-                                        child: Text(
-                                          (FoodOrderModel()
-                                                      .getDeliveryAddress()
-                                                      ?.fullAddress !=
-                                                  null)
-                                              ? FoodOrderModel()
-                                                  .getDeliveryAddress()
-                                                  .fullAddress
-                                              : AppTranslations.of(context).text(
-                                                  'home_address_bar_placeholder'),
-                                          style: TextStyle(color: Colors.white),
-                                          overflow: TextOverflow.ellipsis,
-                                        ),
-                                      ),
+                                                ?.fullAddress !=
+                                            null)
+                                        ? FoodOrderModel()
+                                            .getDeliveryAddress()
+                                            .fullAddress
+                                        : AppTranslations.of(context).text(
+                                            'home_address_bar_placeholder'),
+                                    style: TextStyle(color: Colors.white),
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ),
+                              ),
+                              IconButton(
+                                onPressed: () {
+                                  createOrder();
+                                },
+                                icon: Stack(
+                                  children: [
+                                    Image.asset(
+                                      'images/ic_cart.png',
+                                      width: 36,
                                     ),
-                                    IconButton(
-                                      onPressed: () {
-                                        createOrder();
-                                      },
-                                      icon: Stack(
-                                        children: [
-                                          Image.asset(
-                                            'images/ic_cart.png',
-                                            width: 36,
-                                          ),
-                                          ValueListenableBuilder<
-                                                  List<FoodOrderCart>>(
-                                              valueListenable: FoodOrderModel
-                                                  .orderCartNotifier,
-                                              builder: (BuildContext context,
-                                                  List<FoodOrderCart> value,
-                                                  Widget child) {
-                                                print(value);
-                                                if (value.length > 0) {
-                                                  return Container(
-                                                    decoration: BoxDecoration(
-                                                      shape: BoxShape.circle,
-                                                      color: Colors.white,
-                                                      border: Border.all(
-                                                          color: Colors.black),
-                                                    ),
-                                                    alignment: Alignment.center,
-                                                    width: 16,
-                                                    height: 16,
-                                                    child: Text(
-                                                      value.length.toString(),
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style: TextStyle(
-                                                        color: Colors.black,
-                                                        fontSize: 10,
-                                                      ),
-                                                    ),
-                                                  );
-                                                } else {
-                                                  return Container();
-                                                }
-                                              })
-                                        ],
-                                      ),
-                                    ),
+                                    ValueListenableBuilder<List<FoodOrderCart>>(
+                                        valueListenable:
+                                            FoodOrderModel.orderCartNotifier,
+                                        builder: (BuildContext context,
+                                            List<FoodOrderCart> value,
+                                            Widget child) {
+                                          print(value);
+                                          if (value.length > 0) {
+                                            return Container(
+                                              decoration: BoxDecoration(
+                                                shape: BoxShape.circle,
+                                                color: Colors.white,
+                                                border: Border.all(
+                                                    color: Colors.black),
+                                              ),
+                                              alignment: Alignment.center,
+                                              width: 16,
+                                              height: 16,
+                                              child: Text(
+                                                value.length.toString(),
+                                                textAlign: TextAlign.center,
+                                                style: TextStyle(
+                                                  color: Colors.black,
+                                                  fontSize: 10,
+                                                ),
+                                              ),
+                                            );
+                                          } else {
+                                            return Container();
+                                          }
+                                        })
                                   ],
                                 ),
                               ),
-                              SearchBarInput(
-                                  onChange: (key) {
-                                    _debouncer
-                                        .run(() => getNearbyShopList(key));
-                                  },
-                                  isAutoFocus: true),
-                              renderFilter(),
                             ],
                           ),
-                          botChild: null,
-                          // botChild: Column(
-                          //   crossAxisAlignment: CrossAxisAlignment.start,
-                          //   children: [
-                          //     FoodTypeContainer(
-                          //       foodOptions: AppConfig.foodOptions,
-                          //       titleColor: Colors.white,
-                          //       onClickIcon: (foodOptions) {
-                          //         FoodOrderModel().foodOption = foodOptions;
-                          //         Navigator.pushNamed(context, ShopListPage.id);
-                          //       },
-                          //     )
-                          //   ],
-                          // ),
                         ),
-                      ),
-                      if (AppConfig.histories.length > 0)
-                        SliverToBoxAdapter(
-                          child: HorizontalOrderList(
-                            orders: AppConfig.histories,
-                          ),
-                        ),
-                      _shops != null && _shops.length > 0
-                          ? SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                (BuildContext context, int index) {
-                                  return ShopCard(
-                                    shopType:
-                                        FoodOrderModel().foodOption.shopType,
-                                    shop: _shops[index],
-                                    callbackMethod: () {
-                                      getNearbyShopList();
-                                      Future.delayed(Duration(seconds: 2), () {
-                                        print("3434 ${_shops[index].city}");
-                                      });
-                                    },
-                                  );
-                                },
-                                childCount: _shops.length, // 1000 list items
-                              ),
-                            )
-                          : SliverToBoxAdapter(
-                              child: Center(
-                                child: Text(AppTranslations.of(context)
-                                    .text('no_shop_nearby')),
-                              ),
-                            ),
-                    ],
+                        SearchBarInput(
+                            onChange: (key) {
+                              _debouncer.run(() => getNearbyShopList(key));
+                            },
+                            isAutoFocus: true),
+                        renderFilter(),
+                      ],
+                    ),
+                    botChild: null,
+                    // botChild: Column(
+                    //   crossAxisAlignment: CrossAxisAlignment.start,
+                    //   children: [
+                    //     FoodTypeContainer(
+                    //       foodOptions: AppConfig.foodOptions,
+                    //       titleColor: Colors.white,
+                    //       onClickIcon: (foodOptions) {
+                    //         FoodOrderModel().foodOption = foodOptions;
+                    //         Navigator.pushNamed(context, ShopListPage.id);
+                    //       },
+                    //     )
+                    //   ],
+                    // ),
                   ),
                 ),
-              ),
+                if (AppConfig.histories.length > 0)
+                  SliverToBoxAdapter(
+                    child: HorizontalOrderList(
+                      orders: AppConfig.histories,
+                    ),
+                  ),
+                _shops != null && _shops.length > 0
+                    ? SliverList(
+                        delegate: SliverChildBuilderDelegate(
+                          (BuildContext context, int index) {
+                            return ShopCard(
+                              shop: _shops[index],
+                              callbackMethod: () {
+                                getNearbyShopList();
+                              },
+                            );
+                          },
+                          childCount: _shops.length, // 1000 list items
+                        ),
+                      )
+                    : SliverToBoxAdapter(
+                        child: Center(
+                          child: Text(AppTranslations.of(context)
+                              .text('no_shop_nearby')),
+                        ),
+                      ),
+              ],
             ),
-          );
+          ),
+        ),
+      ),
+    );
   }
 }

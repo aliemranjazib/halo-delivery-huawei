@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:haloapp/components/action_button.dart';
 import 'package:haloapp/components/custom_flushbar.dart';
 import 'package:haloapp/components/input_textfield.dart';
@@ -47,7 +46,7 @@ class _FoodCartPageState extends State<FoodCartPage> {
   String _cartUserEmail = User().getUserEmail();
   String _cartUserPhone = User().getUserPhone();
 
-  String _selectedPaymentMethod = FoodOrderModel().getPaymentMethod();
+  String _selectedPaymentMethod = FoodOrderModel().getPaymentMethod() ?? 'cod';
   String _selectedBookDate;
   String _selectedBookTime;
   Map _validatedCoupon = {};
@@ -570,6 +569,7 @@ class _FoodCartPageState extends State<FoodCartPage> {
                                               amount: FoodOrderModel()
                                                   .getFoodFinalPrice(),
                                             ),
+                                            if((FoodOrderModel().getShop()?.shopPartner == true))
                                             FoodPricingWidget(
                                               title: 'delivery_fee',
                                               amount: FoodOrderModel()
@@ -620,17 +620,14 @@ class _FoodCartPageState extends State<FoodCartPage> {
                                                   )
                                                 : Container(),
                                             (FoodOrderModel()
-                                                        .getAutoDiscount() !=
-                                                    '0.00')
+                                                .getAutoDiscount() !=
+                                                '0.00')
                                                 ? FoodPricingWidget(
-                                                    title: AppTranslations.of(
-                                                            context)
-                                                        .text(
-                                                            "special_promo_label"),
-                                                    amount: FoodOrderModel()
-                                                        .getAutoDiscount(),
-                                                    isDiscount: true,
-                                                  )
+                                              title: AppTranslations.of(context).text("special_promo_label"),
+                                              amount: FoodOrderModel()
+                                                  .getAutoDiscount(),
+                                              isDiscount: true,
+                                            )
                                                 : Container(),
                                             if (_validatedCoupon.length > 0)
                                               Column(
@@ -672,7 +669,7 @@ class _FoodCartPageState extends State<FoodCartPage> {
                                                 ],
                                               ),
                                             FoodPricingWidget(
-                                              title: 'final_price',
+                                              title: "${(FoodOrderModel().getShop()?.shopPartner == true)? "final_price" :"final_price_non_partner"}",
                                               amount:
                                                   (_validatedCoupon.length > 0)
                                                       ? _validatedCoupon[
@@ -1124,7 +1121,7 @@ class _FoodCartPageState extends State<FoodCartPage> {
     }
   }
 
-  void clearCoupon() {
+  void clearCoupon(){
     setState(() {
       _couponCodeTFValue = '';
       _validatedCoupon = {};

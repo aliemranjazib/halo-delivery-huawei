@@ -3,12 +3,12 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_hms_gms_availability/flutter_hms_gms_availability.dart';
 import 'package:haloapp/components/action_button.dart';
 import 'package:haloapp/screens/auth/signup_page.dart';
 import 'package:haloapp/utils/app_translations/app_translations.dart';
 import 'package:haloapp/utils/constants/custom_colors.dart';
 import 'package:haloapp/widget/social_sign_in.dart';
-import 'package:huawei_hmsavailability/huawei_hmsavailability.dart';
 
 SocialLoginInfoModel socialInfoModelFromJson(String str) => SocialLoginInfoModel.fromJson(json.decode(str));
 
@@ -83,15 +83,12 @@ class SocialLoginContainer extends StatefulWidget {
 
 class SocialLoginContainerState extends State<SocialLoginContainer> with SingleTickerProviderStateMixin{
 
-  int isHmsAvailable;
-  HmsApiAvailability hmsApiAvailability;
+  bool isHmsAvailable = false;
+
   @override
   void initState() {
     super.initState();
-    hmsApiAvailability = HmsApiAvailability();
-    hmsApiAvailability.isHMSAvailable().then((value){
-      // 0: HMS Core (APK) is available.
-      // 1: No HMS Core (APK) is found on the device.
+    FlutterHmsGmsAvailability.isHmsAvailable.then((value){
       isHmsAvailable = value;
       setState(() {
 
@@ -114,7 +111,7 @@ class SocialLoginContainerState extends State<SocialLoginContainer> with SingleT
               SizedBox(height: 6,),
               FacebookSignInButton(socialLoginButtonType: SocialLoginButtonType.button,enable: widget.enable,socialListenerCallback: widget.socialListenerCallback,),
               SizedBox(height: 6,),
-              if(isHmsAvailable == 1 || Platform.isIOS)
+              if(!isHmsAvailable)
               GoogleSignInButton(socialLoginButtonType: SocialLoginButtonType.button,enable: widget.enable,socialListenerCallback: widget.socialListenerCallback,),
               SizedBox(height: 6,),
               ActionIconButtonOutline(

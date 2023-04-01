@@ -26,7 +26,7 @@ class NetworkingService {
   }
 
   Future getRequest(String url) async {
-    HTTP.Response response = await HTTP.get(url);
+    HTTP.Response response = await HTTP.get(Uri.parse(url));
 
     if (response.statusCode >= 200 && response.statusCode < 300) {
       return response;
@@ -41,8 +41,8 @@ class NetworkingService {
     Map<String, String> postHeaders =
         (headers == null) ? await APIUrls().getHeader() : headers;
 
-    HTTP.Response response =
-        await HTTP.post(url, headers: postHeaders, body: jsonEncode(params));
+    HTTP.Response response = await HTTP.post(Uri.parse(url),
+        headers: postHeaders, body: jsonEncode(params));
     print("### " + url);
     print(params);
     print(postHeaders);
@@ -56,7 +56,7 @@ class NetworkingService {
   }
 
   Future postRequestWithAuth(String url, Map<String, dynamic> params) async {
-    try{
+    try {
       print(User().getAuthToken());
       print(url);
       print(jsonEncode(params));
@@ -64,19 +64,21 @@ class NetworkingService {
       HttpClient client = HttpClient();
       client.connectionTimeout = Duration(seconds: 30);
       var request = await client.postUrl(Uri.parse(url));
-      request.headers.add("Content-Type", 'application/json; charset=utf-8');
-
-      if (User().getAuthToken() != null)
-        request.headers.add("Authorization", User().getAuthToken());
+      request.headers.set("Content-Type", 'application/json; charset=utf-8');
 
       String languageCode = await SharedPrefService().getLanguage();
-      request.headers.add('language', languageCode);
+      request.headers.set('language', languageCode);
 
       Map<String, String> customHeaders = await APIUrls().getHeader();
       customHeaders.forEach((key, value) {
-        request.headers.add(key, value);
+        request.headers.set(key, value);
       });
 
+      print("User Auth - ${User().getAuthToken()}");
+      if (User().getAuthToken() != null) {
+        request.headers.set("Authorization", User().getAuthToken());
+        print("ADDED");
+      }
       List<int> body = utf8.encode(json.encode(params));
       request.add(body);
 //    request.write(body);
@@ -94,13 +96,12 @@ class NetworkingService {
         print('Error: ' + response.toString());
         throw 'Error';
       }
-    }catch(e){
+    } catch (e) {
       print(e);
-      if(e is SocketException){
+      if (e is SocketException) {
         throw "Connection timed out";
       }
     }
-
   }
 
   Future<void> autoLogin() async {

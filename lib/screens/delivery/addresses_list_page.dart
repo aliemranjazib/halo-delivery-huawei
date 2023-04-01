@@ -268,7 +268,7 @@ class _AddressesListPageState extends State<AddressesListPage> {
                                             width: 35.0,
                                             child: ElevatedButton(
                                               child: Icon(Icons.delete_forever),
-                                              // padding: EdgeInsets.zero,
+
                                               onPressed: () {
                                                 removeAddress(index);
                                               },

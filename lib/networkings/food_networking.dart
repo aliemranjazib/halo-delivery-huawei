@@ -1,5 +1,4 @@
 import 'dart:io';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:haloapp/models/address_model.dart';
 import 'package:haloapp/models/coupon_model.dart';
 import 'package:haloapp/models/food_model.dart';
@@ -14,7 +13,7 @@ import 'package:haloapp/utils/services/google_map_places_service.dart';
 import 'package:haloapp/utils/services/networking_services.dart';
 import 'dart:convert';
 
-import 'package:huawei_map/components/latLng.dart';
+import 'package:huawei_map/map.dart' as huaweiMap;
 
 class FoodNetworking {
   static Future<FoodRiderTracking> getFoodRiderTracking(
@@ -45,12 +44,11 @@ class FoodNetworking {
 
     String data = await response.transform(utf8.decoder).join();
     var decodedData = jsonDecode(data);
+    print(decodedData);
 
     if (response.statusCode == 200) {
       List<ShopModel> shops =
           await _delegateNearbyShopsData(decodedData['response']);
-      print("erer ${shops.first.category}");
-
       return shops;
     } else if (response.statusCode == 400) {
       return [];
@@ -84,28 +82,6 @@ class FoodNetworking {
     } else {
       print('getNearbyShops Failed statuscode: ${response.statusCode}');
       print('getNearbyShops Failed: ' + decodedData['msg']);
-      throw decodedData['msg'] ?? '';
-    }
-  }
-
-  Future<List<ShopModel>> getNearbyPromoteItem(
-      Map<String, dynamic> params) async {
-    HttpClientResponse response = await NetworkingService()
-        .postRequestWithAuth(APIUrls().getNearbyPromoItemUrl(), params);
-
-    String data = await response.transform(utf8.decoder).join();
-    var decodedData = jsonDecode(data);
-    print(decodedData);
-
-    if (response.statusCode == 200) {
-      List<ShopModel> shops =
-          await _delegateNearbyShopsData(decodedData['response']);
-      return shops;
-    } else if (response.statusCode == 400) {
-      return [];
-    } else {
-      print('getNearbyPromoteItem Failed statuscode: ${response.statusCode}');
-      print('getNearbyPromoteItem Failed: ' + decodedData['msg']);
       throw decodedData['msg'] ?? '';
     }
   }
@@ -261,9 +237,6 @@ class FoodNetworking {
                           ? true
                           : false,
                   priceDiscounted: foodsDetails['priceDiscounted'] ?? '',
-                  imgPromoTag:
-                      (foodsDetails['imgPromoTag'] == 'true') ? true : false,
-                  imgPromoTagText: foodsDetails['imgPromoTagText'] ?? '',
                   variants: variants,
                 );
 
@@ -314,7 +287,6 @@ class FoodNetworking {
           (details['shop_free_delivery_status'] == 'true') ? true : false,
       featuresStatus:
           (details['shop_features_status'] == 'true') ? true : false,
-      featuresDisplay: details['shop_feature_tag'] ?? '',
       totalOrder: details['shop_total_order'] ?? '',
       rating: details['shop_rating'] ?? '0.0',
       shopOpenType: details['shop_open_type'] ?? '',
@@ -329,12 +301,12 @@ class FoodNetworking {
       shopDeliveryFee:
           double.parse(details['shop_delivery_fee'].toString() ?? "0.0"),
       shopClosePreOrder: (details['shop_close_preOrder'] == 'true'),
+      shopPartner: (details['shop_partner'] == 'true'),
       shopUserFavourite:
           (details['shop_user_favourite'] == 'true') ? true : false,
       availableDates: (details['preOrder'] ?? []),
       notInAreaStatus: (details['notInAreaStatus'] == 'true') ? true : false,
-      showPreOrderStatus:
-          (details['showPreOrderStatus'] == 'true') ? true : false,
+      showPreOrderStatus: (details['showPreOrderStatus'] == 'true') ? true : false,
     );
 
     return shop;
@@ -454,8 +426,7 @@ class FoodNetworking {
           packingFee: decodedData['response']['packing_fee'].toString() ?? '0',
           autoDiscount:
               decodedData['response']['autoDiscount'].toString() ?? '0.00');
-      FoodOrderModel().setPaymentMethodSelected(
-          decodedData['response']['paymentMethodSelected']);
+
       FoodOrderModel().setDeliveryInterval(
           int.tryParse(decodedData['response']['shop_delivery_interval']) ?? 0);
       FoodOrderModel()
@@ -464,8 +435,6 @@ class FoodNetworking {
           .setPaymentMethods(decodedData['response']['paymentMethod'] ?? []);
       FoodOrderModel().setOvertimeStatus(
           decodedData['response']['overtimeStatus'].toString() ?? '');
-      FoodOrderModel().setPaymentMethods(
-          decodedData['response']['paymentMethodWithIcon'] ?? []);
 
       return true;
     } else if (response.statusCode == 400) {
@@ -587,7 +556,7 @@ class FoodNetworking {
           for (int i = 0; i < zonesArr.length; i++) {
             List<dynamic> zoneDetailsArr = zonesArr[i]['zone_latlng'];
 
-            List<LatLng> zoneLatLngs = [];
+            List<huaweiMap.LatLng> zoneLatLngs = [];
             if (zoneDetailsArr != null) {
               if (zoneDetailsArr.length > 0) {
                 for (int i = 0; i < zoneDetailsArr.length; i++) {
@@ -596,7 +565,7 @@ class FoodNetworking {
                   String lat = splitStr[0];
                   String lng = splitStr[1];
 
-                  zoneLatLngs.add(LatLng(double.parse(lat), double.parse(lng)));
+                  zoneLatLngs.add(huaweiMap.LatLng(double.parse(lat), double.parse(lng)));
                 }
               }
             }

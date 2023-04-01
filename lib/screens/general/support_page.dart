@@ -54,8 +54,7 @@ class _SupportPageState extends State<SupportPage> {
       });
       print('Could not launch $url');
       showSimpleFlushBar(
-          AppTranslations.of(context)
-              .text('failed_please_make_sure_install_fb_messenger'),
+          AppTranslations.of(context).text('failed_please_make_sure_install_fb_messenger'),
           context);
     }
   }
@@ -134,8 +133,7 @@ class _SupportPageState extends State<SupportPage> {
                       ),
                       padding: EdgeInsets.symmetric(vertical: 10),
                       onPressed: () {
-                        Utils.showChatConfirmationDialog(
-                            context, () => openChatPage());
+                        Utils.showChatConfirmationDialog(context, () => openChatPage());
                       },
                       color: kColorRed,
                       textColor: Colors.white,

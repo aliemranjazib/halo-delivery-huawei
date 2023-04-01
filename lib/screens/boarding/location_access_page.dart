@@ -29,9 +29,7 @@ class _LocationPageState extends State<LocationPage> {
           bool locationPermissionGranted =
               await LocationService().checkPermission();
           if (locationPermissionGranted) {
-            if (mounted) {
-              Navigator.pop(context);
-            }
+            Navigator.pop(context);
           }
         },
       ),

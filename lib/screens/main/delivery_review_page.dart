@@ -1,5 +1,4 @@
 import 'dart:convert';
-import 'dart:developer';
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -24,9 +23,8 @@ import 'package:haloapp/screens/delivery/delivery_booking_success_page.dart';
 import 'package:haloapp/screens/delivery/delivery_payment_locations_dialog.dart';
 import 'package:haloapp/screens/general/confirmation_dialog.dart';
 import 'package:haloapp/screens/general/online_payment_page.dart';
-import 'package:haloapp/screens/main/home_page_new.dart';
 // import 'package:haloapp/screens/general/payment_method_selection_dialog.dart';
-// import 'package:haloapp/screens/main/home_page.dart';
+import 'package:haloapp/screens/main/home_page.dart';
 import 'package:haloapp/screens/main/voucher_list_page.dart';
 import 'package:haloapp/utils/app_translations/app_translations.dart';
 import 'package:haloapp/utils/constants/api_urls.dart';
@@ -39,8 +37,6 @@ import 'package:haloapp/utils/services/pop_with_result_service.dart';
 import 'package:haloapp/utils/services/shared_pref_service.dart';
 import 'package:haloapp/components/model_progress_hud.dart';
 import 'dart:math' as math;
-
-import '../../models/payment_method_model.dart';
 
 class DeliveryReviewPage extends StatefulWidget {
   static const String id = 'deliveryReviewPage';
@@ -58,7 +54,6 @@ class _DeliveryReviewPageState extends State<DeliveryReviewPage> {
   String _couponCodeTFValue;
   String _selectedPaymentMethod = 'cod';
   List<Coupon> _coupons = [];
-  List<DynamicPaymentMethodModel> _paymentMethods = [];
 
   void confirmBooking() async {
     Map<String, dynamic> params = {
@@ -232,7 +227,9 @@ class _DeliveryReviewPageState extends State<DeliveryReviewPage> {
         onChanged: (value) {
           setState(() {
             _selectedPaymentMethod = value;
+            // FoodOrderModel().setPaymentMethod(value);
             BookingModel().setPaymentMethod(value);
+
           });
         },
       ),
@@ -242,18 +239,7 @@ class _DeliveryReviewPageState extends State<DeliveryReviewPage> {
   @override
   void initState() {
     super.initState();
-    _initPaymentMethods();
     _initCouponList();
-  }
-
-  _initPaymentMethods() async {
-    BookingModel().getPaymentMethods().forEach((element) {
-      _paymentMethods.add(DynamicPaymentMethodModel(
-        name: element['method_name'],
-        title: element['method_display_name'],
-        image: element['method_icon_url'],
-      ));
-    });
   }
 
   _initCouponList() async {
@@ -425,8 +411,8 @@ class _DeliveryReviewPageState extends State<DeliveryReviewPage> {
                     Container(
                       color: Colors.white,
                       child: PaymentMethodSelectionBox(
-                        paymentMethod: _paymentMethods.firstWhere(
-                            (e) => e.name == _selectedPaymentMethod),
+                        paymentMethod: PaymentMethod()
+                            .getPaymentMethod(_selectedPaymentMethod),
                         onPressed: () {
                           _openPaymentMethodDialog();
                         },

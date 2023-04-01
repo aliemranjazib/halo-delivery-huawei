@@ -1,22 +1,4 @@
 {
-
-  "charity":"慈善机构",
-
-  
-  "points": "积分",
-  "halo_points": "Halo 积分",
-  "you_have_earned": "你赚了",
-  "redeem": "赎回",
-  "points_expiring_on": "积分到期日",
-  "points_istory": "积分历史",
-  "redeem_Halo_ponts": "兑换光环桥",
-  "convert_halo_points": "转换你的 Halo 指着 Halo 钱包 平衡",
-  "redeem_successful": "兑换成功",
-  "date_and_time": "日期和时间",
-  "redeem_amount": "兑换金额",
-  "done": "完毕",
-
-
   "type_your_address_here": "在这里输入您的地址...",
   "provide_name_to_save_address": "请提供名称以保存地址",
   "label_for_your_own_ref": "例如：标签供您自己参考",
@@ -515,6 +497,5 @@
   "delete_account" : "Delete account",
   "delete_account_confirm": "Are you sure to delete your account? ",
   "change_address": "Change address",
-  "out_of_delivery_zone": "Out Of Delivery Zone",
-  "super_jimat": "Super Jimat"
+  "out_of_delivery_zone": "Out Of Delivery Zone"
 }

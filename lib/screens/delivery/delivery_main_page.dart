@@ -34,7 +34,8 @@ import 'package:haloapp/utils/services/huawei_map_places_service.dart';
 import 'package:haloapp/utils/services/location_service.dart';
 import 'package:haloapp/utils/services/pop_with_result_service.dart';
 import 'package:haloapp/components/model_progress_hud.dart';
-import 'package:huawei_location/location/location.dart';
+import 'package:huawei_location/huawei_location.dart';
+
 import '../../components/address_view.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
 import '../../components/google_map_widget.dart';

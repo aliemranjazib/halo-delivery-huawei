@@ -122,7 +122,7 @@ class _DeliveryHistoryPageState extends State<DeliveryHistoryPage>
       });
     } catch (e) {
       print(e.toString());
-      showSimpleFlushBar(e.toString(), context);
+      showSimpleFlushBar(e, context);
     } finally {
       setState(() {
         _showSpinner = false;
@@ -361,7 +361,7 @@ class _DeliveryHistoryPageState extends State<DeliveryHistoryPage>
                         ),
                       ]),
                     ),
-                    onTap: () async {
+                    onTap: () async{
                       var isCancelBooking = await Navigator.push(
                         context,
                         MaterialPageRoute(
@@ -370,8 +370,8 @@ class _DeliveryHistoryPageState extends State<DeliveryHistoryPage>
                         ),
                       );
 
-                      if (isCancelBooking != null && isCancelBooking is bool) {
-                        if (isCancelBooking) {
+                      if(isCancelBooking!= null && isCancelBooking is bool){
+                        if(isCancelBooking){
                           _historyTypeBtnPressed(tabController.index);
                         }
                       }
@@ -401,7 +401,7 @@ class _DeliveryHistoryPageState extends State<DeliveryHistoryPage>
           ),
           bottom: TabBar(
             controller: tabController,
-            onTap: (index) {
+            onTap: (index){
               _historyTypeBtnPressed(index);
             },
             tabs: <Widget>[
@@ -429,20 +429,22 @@ class _DeliveryHistoryPageState extends State<DeliveryHistoryPage>
               Container(
                 padding: EdgeInsets.only(top: 10),
                 child: RefreshIndicator(
-                    onRefresh: () async {
-                      _historyTypeBtnPressed(tabController.index);
-                      return Future.value(true);
-                    },
-                    child: _getHistoryListView()),
+                  onRefresh: ()async{
+                    _historyTypeBtnPressed(tabController.index);
+                    return Future.value(true);
+                  },
+                    child: _getHistoryListView()
+                ),
               ),
               Container(
                 padding: EdgeInsets.only(top: 10),
                 child: RefreshIndicator(
-                    onRefresh: () async {
-                      _historyTypeBtnPressed(tabController.index);
-                      return Future.value(true);
-                    },
-                    child: _getHistoryListView()),
+                  onRefresh: ()async{
+                    _historyTypeBtnPressed(tabController.index);
+                    return Future.value(true);
+                  },
+                  child: _getHistoryListView()
+                ),
               ),
             ],
           ),

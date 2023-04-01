@@ -26,7 +26,7 @@ class CustomSliverAppBarFoodDelegate extends SliverPersistentHeaderDelegate {
           decoration: kAppBarGradient,
         ),
         Positioned(
-          top: 230,
+          top: 190,
           left: 0,
           right: 0,
           bottom: 0,

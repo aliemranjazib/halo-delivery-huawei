@@ -1,5 +1,3 @@
-import 'dart:ffi';
-
 import 'package:carousel_slider/carousel_controller.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
@@ -36,21 +34,16 @@ class _BannerSliderState extends State<BannerSlider> {
               margin: EdgeInsets.all(5.0),
               child: GestureDetector(
                 onTap: () async {
-                  if (item.promoActionUrl != null &&
-                      item.promoActionUrl != '') {
-                    if (await canLaunchUrl(Uri.parse(item.promoActionUrl))) {
-                      await launchUrl(Uri.parse(item.promoActionUrl));
+                  if(item.promoActionUrl != null && item.promoActionUrl != ''){
+                    if (await canLaunch(item.promoActionUrl)) {
+                      await launch(item.promoActionUrl);
                     } else {
-                      showSimpleFlushBar(
-                          AppTranslations.of(context).text('failed_to_load'),
-                          context);
+                      showSimpleFlushBar(AppTranslations.of(context).text('failed_to_load'), context);
                     }
                   }
                 },
-                child: Image.network(
-                  item.promoImageUrl,
-                  width: double.infinity,
-                  fit: BoxFit.contain,
+                child: Column(
+                  children: <Widget>[Image.network(item.promoImageUrl)],
                 ),
               ),
             ))

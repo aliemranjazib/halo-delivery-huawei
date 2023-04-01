@@ -19,7 +19,7 @@ class PaymentMethodSelectionBox extends StatelessWidget {
       this.isShowBalance = false});
 
   final String image;
-  final DynamicPaymentMethodModel paymentMethod;
+  final PaymentMethodModel paymentMethod;
   final Function onPressed;
   final bool isShowBalance;
 
@@ -61,17 +61,11 @@ class PaymentMethodSelectionBox extends StatelessWidget {
                 children: [
                   Container(
                     padding: EdgeInsets.only(right: 16),
-                    child: (paymentMethod.image == null)
-                        ? Image.asset(
-                            'images/halo_logo.png',
-                            width: 24,
-                            height: 24,
-                          )
-                        : Image.network(
-                            paymentMethod.image,
-                            width: 24,
-                            height: 24,
-                          ),
+                    child: Image.asset(
+                      paymentMethod.image ?? 'images/halo_logo.png',
+                      width: 24,
+                      height: 24,
+                    ),
                   ),
                   getContainer(context, paymentMethod),
                   Transform.rotate(
@@ -92,7 +86,7 @@ class PaymentMethodSelectionBox extends StatelessWidget {
   }
 
   Widget getContainer(
-      BuildContext context, DynamicPaymentMethodModel paymentMethodModel) {
+      BuildContext context, PaymentMethodModel paymentMethodModel) {
     try {
       if (paymentMethodModel.name == "haloWallet" &&
           User().walletTransactionsResponse?.response?.walletBalance != null &&
@@ -108,8 +102,7 @@ class PaymentMethodSelectionBox extends StatelessWidget {
       print(e);
     }
     return Expanded(
-      child: Text(paymentMethodModel.title),
-      // child: Text(AppTranslations.of(context).text(paymentMethodModel.name)),
+      child: Text(AppTranslations.of(context).text(paymentMethodModel.name)),
     );
   }
 }

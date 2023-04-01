@@ -1,16 +1,6 @@
 import 'package:haloapp/models/payment_method_model.dart';
 
 class PaymentMethod {
-  // since the payment method is now dynamic , it's not longer considered as constants
-
-  // List<PaymentMethodModel> _paymentMethods = <PaymentMethodModel>[];
-
-  // void addAll(List<PaymentMethodModel> paymentMethods) {
-  //   this._paymentMethods = paymentMethods;
-  // }
-
-  // List<PaymentMethodModel> getPaymentMethods() {}
-
   List<PaymentMethodModel> getPaymentMethods() {
     return [
       PaymentMethodModel(
@@ -43,6 +33,7 @@ class PaymentMethod {
         name: 'ewallet',
         image: 'images/ic_e_wallet.png',
       ),
+
     ];
   }
 

@@ -13,7 +13,6 @@ import 'package:haloapp/utils/constants/custom_colors.dart';
 import 'package:haloapp/utils/constants/payment_method.dart';
 import 'package:haloapp/utils/constants/styles.dart';
 import 'package:haloapp/utils/utils.dart';
-import 'dart:developer';
 
 class PaymentMethodSelectionDialog extends StatefulWidget {
   PaymentMethodSelectionDialog({
@@ -35,28 +34,23 @@ class PaymentMethodSelectionDialog extends StatefulWidget {
 
 class _PaymentMethodSelectionDialogState
     extends State<PaymentMethodSelectionDialog> {
-  List<DynamicPaymentMethodModel> _paymentMethods =
-      <DynamicPaymentMethodModel>[];
+  List<PaymentMethodModel> _paymentMethods =
+      PaymentMethod().getPaymentMethods();
 
   @override
   void initState() {
     super.initState();
     List<dynamic> validPaymentMethods = [];
     if (widget.bookingType == 'food') {
-      print('inside payment selecton');
-      inspect(FoodOrderModel().getPaymentMethods());
       validPaymentMethods = FoodOrderModel().getPaymentMethods();
     } else if (widget.bookingType == 'express') {
       validPaymentMethods = BookingModel().getPaymentMethods();
     }
 
-    validPaymentMethods.forEach((element) {
-      _paymentMethods.add(DynamicPaymentMethodModel(
-        name: element['method_name'],
-        title: element['method_display_name'],
-        image: element['method_icon_url'],
-      ));
-    });
+    _paymentMethods = PaymentMethod()
+        .getPaymentMethods()
+        .where((e) => validPaymentMethods.any((ie) => e.name == ie))
+        .toList();
 
     _initWalletBalance();
   }
@@ -65,7 +59,7 @@ class _PaymentMethodSelectionDialogState
     List<Widget> list = [];
 
     for (int i = 0; i < _paymentMethods.length; i++) {
-      DynamicPaymentMethodModel method = _paymentMethods[i];
+      PaymentMethodModel method = _paymentMethods[i];
 
       Widget radioBtn = GestureDetector(
         onTap: () {
@@ -86,17 +80,11 @@ class _PaymentMethodSelectionDialogState
             children: [
               Container(
                 padding: EdgeInsets.only(right: 16),
-                child: (method.image == null)
-                    ? Image.asset(
-                        'images/ic_e_wallet.png',
-                        width: 24,
-                        height: 24,
-                      )
-                    : Image.network(
-                        method.image,
-                        width: 24,
-                        height: 24,
-                      ),
+                child: Image.asset(
+                  method.image,
+                  width: 24,
+                  height: 24,
+                ),
               ),
               getContainer(method),
               CustomCheckBox(isChecked: widget.selectedMethod == method.name),
@@ -108,14 +96,13 @@ class _PaymentMethodSelectionDialogState
       list.add(radioBtn);
     }
 
-    return Expanded(
-        child: new ListView(
-      shrinkWrap: true,
+    return Column(
+      mainAxisSize: MainAxisSize.min,
       children: list,
-    ));
+    );
   }
 
-  Widget getContainer(DynamicPaymentMethodModel paymentMethodModel) {
+  Widget getContainer(PaymentMethodModel paymentMethodModel) {
     try {
       if (paymentMethodModel.name == "haloWallet" &&
           User().walletTransactionsResponse?.response?.walletBalance != null) {
@@ -149,8 +136,7 @@ class _PaymentMethodSelectionDialogState
       print(e);
     }
     return Expanded(
-      // child: Text(AppTranslations.of(context).text(paymentMethodModel.name)),
-      child: Text(paymentMethodModel.title),
+      child: Text(AppTranslations.of(context).text(paymentMethodModel.name)),
     );
   }
 

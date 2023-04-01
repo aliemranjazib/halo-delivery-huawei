@@ -15,7 +15,8 @@ import 'package:haloapp/utils/services/google_map_places_service.dart';
 import 'package:haloapp/utils/services/location_service.dart';
 import 'package:haloapp/utils/services/shared_pref_service.dart';
 import 'package:haloapp/components/model_progress_hud.dart';
-import 'package:huawei_location/location/location.dart';
+import 'package:huawei_location/huawei_location.dart';
+
 import 'package:huawei_map/map.dart' as huaweiMap;
 
 class DeliveryTrackingPage extends StatefulWidget {

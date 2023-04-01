@@ -6,7 +6,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_hms_gms_availability/flutter_hms_gms_availability.dart';
 import 'package:haloapp/components/model_progress_hud.dart';
 import 'package:haloapp/models/food_history_model.dart';
 import 'package:haloapp/models/food_order_model.dart';
@@ -18,10 +18,10 @@ import 'package:haloapp/utils/constants/custom_colors.dart';
 import 'package:haloapp/utils/constants/fonts.dart';
 import 'package:haloapp/utils/constants/styles.dart';
 import 'package:haloapp/utils/services/datetime_formatter.dart';
-import 'package:huawei_map/components/latLng.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'dart:ui' as ui;
 import 'package:huawei_map/map.dart' as huaweiMap;
+
 
 class FoodHistoryDetailsPage extends StatefulWidget {
   FoodHistoryDetailsPage({@required this.history, this.success = false});
@@ -35,11 +35,11 @@ class FoodHistoryDetailsPage extends StatefulWidget {
 
 class _FoodHistoryDetailsPageState extends State<FoodHistoryDetailsPage>
     with TickerProviderStateMixin {
-  // BitmapDescriptor pickupIcon;
-  // BitmapDescriptor dropoffIcon;
-  // BitmapDescriptor motorIcon;
-  // LatLng customerCoordinates;
-  // LatLng merchantCoordinates;
+//  BitmapDescriptor pickupIcon;
+//  BitmapDescriptor dropoffIcon;
+//  BitmapDescriptor motorIcon;
+//  LatLng customerCoordinates;
+//  LatLng merchantCoordinates;
 
   //Huawei Map
   huaweiMap.BitmapDescriptor huaweiMapPickupIcon;
@@ -58,23 +58,26 @@ class _FoodHistoryDetailsPageState extends State<FoodHistoryDetailsPage>
 
   @override
   void initState() {
+    print("widget.history.shopPartner ${widget.history.shopPartner}");
     _animController = AnimationController(
         duration: const Duration(milliseconds: 1500), vsync: this)
       ..repeat(reverse: true);
 
-    // customerCoordinates = LatLng(double.parse(widget.history.shopLat),
-    //     double.parse(widget.history.shopLng));
+//    customerCoordinates = LatLng(double.parse(widget.history.shopLat),
+//        double.parse(widget.history.shopLng));
+//
+//    merchantCoordinates = LatLng(double.parse(widget.history.customerLat),
+//        double.parse(widget.history.customerLng));
 
-    // merchantCoordinates = LatLng(double.parse(widget.history.customerLat),
-    //     double.parse(widget.history.customerLng));
+    print("Customer : ${widget.history.shopLat} , ${widget.history.shopLng}");
+    print("Merchant : ${widget.history.customerLat} , ${widget.history.customerLng}");
 
-    huaweiMapCustomerCoordinates = huaweiMap.LatLng(
-        double.parse(widget.history.shopLat),
+    huaweiMapCustomerCoordinates = huaweiMap.LatLng(double.parse(widget.history.shopLat),
         double.parse(widget.history.shopLng));
 
-    huaweiMapMerchantCoordinates = huaweiMap.LatLng(
-        double.parse(widget.history.customerLat),
+    huaweiMapMerchantCoordinates = huaweiMap.LatLng(double.parse(widget.history.customerLat),
         double.parse(widget.history.customerLng));
+
 
     initRiderTracking();
     setupIcons();
@@ -140,14 +143,14 @@ class _FoodHistoryDetailsPageState extends State<FoodHistoryDetailsPage>
     final Uint8List dropoffIconRaw =
         await getBytesFromAsset('images/pin_red.png', 100);
 
-    // motorIcon = BitmapDescriptor.fromBytes(motorIconRaw);
-    // pickupIcon = BitmapDescriptor.fromBytes(pickupIconRaw);
-    // dropoffIcon = BitmapDescriptor.fromBytes(dropoffIconRaw);
+//    motorIcon = BitmapDescriptor.fromBytes(motorIconRaw);
+//    pickupIcon = BitmapDescriptor.fromBytes(pickupIconRaw);
+//    dropoffIcon = BitmapDescriptor.fromBytes(dropoffIconRaw);
 
     huaweiMotorIcon = huaweiMap.BitmapDescriptor.fromBytes(motorIconRaw);
     huaweiMapPickupIcon = huaweiMap.BitmapDescriptor.fromBytes(pickupIconRaw);
     huaweiMapDropoffIcon = huaweiMap.BitmapDescriptor.fromBytes(dropoffIconRaw);
-    ImageConfiguration imageConfig = ImageConfiguration(size: Size(35, 35));
+    // ImageConfiguration imageConfig = ImageConfiguration(size: Size(35, 35));
     // motorIcon = await BitmapDescriptor.fromAssetImage(
     //     imageConfig, 'images/motorcyclex32.png');
     // pickupIcon = await BitmapDescriptor.fromAssetImage(
@@ -237,17 +240,18 @@ class _FoodHistoryDetailsPageState extends State<FoodHistoryDetailsPage>
                             height: MediaQuery.of(context).size.height -
                                 AppBar().preferredSize.height -
                                 350,
-                            child: getMap(),
+                            child:getMap()
 //                            FutureBuilder(
 //                              future: getMap(),
 //                              builder: (BuildContext context, AsyncSnapshot<dynamic> snapshot){
 //                                if(snapshot.connectionState == ConnectionState.done){
 //                                  return snapshot.data;
 //                                }
-//                                return ModalProgressHUD(
-//                                  inAsyncCall: true,
-//                                  child: Container()
-//                                );
+//                                return Container();
+////                                return ModalProgressHUD(
+////                                  inAsyncCall: true,
+////                                  child: Container()
+////                                );
 //                              },
 //                            )
                           ),
@@ -469,6 +473,7 @@ class _FoodHistoryDetailsPageState extends State<FoodHistoryDetailsPage>
                         color: Colors.white,
                         child: Column(
                           children: <Widget>[
+                            if((widget.history.shopPartner))
                             FoodPricingWidget(
                               title: 'delivery_fee',
                               amount: widget.history.orderDeliveryFee ?? '0.00',
@@ -483,13 +488,14 @@ class _FoodHistoryDetailsPageState extends State<FoodHistoryDetailsPage>
                                   )
                                 : Container(),
                             (widget.history.orderAutoDiscount != '0' &&
-                                    widget.history.orderAutoDiscount != '0.00')
-                                ? FoodPricingWidget(
-                                    title: 'special_promo_label',
-                                    amount: widget.history.orderAutoDiscount ??
-                                        '0.00',
-                                    isDiscount: true,
-                                  )
+                                widget.history.orderAutoDiscount != '0.00')
+                                ?
+                            FoodPricingWidget(
+                              title: 'special_promo_label',
+                              amount: widget.history.orderAutoDiscount ??
+                                  '0.00',
+                              isDiscount: true,
+                            )
                                 : Container(),
                             (widget.history.minimumCharges != '0' &&
                                     widget.history.minimumCharges != '0.00')
@@ -524,7 +530,7 @@ class _FoodHistoryDetailsPageState extends State<FoodHistoryDetailsPage>
                                   )
                                 : Container(),
                             FoodPricingWidget(
-                              title: 'total_price',
+                              title: "${(widget.history.shopPartner)? "total_price" :"final_price_non_partner"}",
                               amount: widget.history.orderPrice ?? '0.00',
                             ),
                           ],
@@ -613,21 +619,17 @@ class _FoodHistoryDetailsPageState extends State<FoodHistoryDetailsPage>
     );
   }
 
-  Widget getMap() {
+ Widget getMap() {
     return huaweiMap.HuaweiMap(
       onMapCreated: (huaweiMap.HuaweiMapController controller) {
         final huaweiMap.LatLng southwest = huaweiMap.LatLng(
-          min(huaweiMapMerchantCoordinates.lat,
-              huaweiMapCustomerCoordinates.lat),
-          min(huaweiMapMerchantCoordinates.lng,
-              huaweiMapCustomerCoordinates.lng),
+          min(huaweiMapMerchantCoordinates.lat, huaweiMapCustomerCoordinates.lat),
+          min(huaweiMapMerchantCoordinates.lng, huaweiMapCustomerCoordinates.lng),
         );
 
         final huaweiMap.LatLng northeast = huaweiMap.LatLng(
-          max(huaweiMapMerchantCoordinates.lat,
-              huaweiMapCustomerCoordinates.lat),
-          max(huaweiMapMerchantCoordinates.lng,
-              huaweiMapCustomerCoordinates.lng),
+          max(huaweiMapMerchantCoordinates.lat, huaweiMapCustomerCoordinates.lat),
+          max(huaweiMapMerchantCoordinates.lng, huaweiMapCustomerCoordinates.lng),
         );
 
         huaweiMap.LatLngBounds bounds = huaweiMap.LatLngBounds(
@@ -639,16 +641,18 @@ class _FoodHistoryDetailsPageState extends State<FoodHistoryDetailsPage>
         //     southwest: huaweiMapMerchantCoordinates,
         //     northeast: huaweiMapCustomerCoordinates
         // );
-        huaweiMap.CameraUpdate u2 =
-            huaweiMap.CameraUpdate.newLatLngBounds(bounds, 100);
+        huaweiMap.CameraUpdate u2 = huaweiMap.CameraUpdate.newLatLngBounds(bounds, 100);
         controller.animateCamera(u2);
       },
       gestureRecognizers: Set()
-        ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
-        ..add(Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()))
-        ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
+        ..add(Factory<PanGestureRecognizer>(
+                () => PanGestureRecognizer()))
+        ..add(Factory<ScaleGestureRecognizer>(
+                () => ScaleGestureRecognizer()))
+        ..add(Factory<TapGestureRecognizer>(
+                () => TapGestureRecognizer()))
         ..add(Factory<VerticalDragGestureRecognizer>(
-            () => VerticalDragGestureRecognizer())),
+                () => VerticalDragGestureRecognizer())),
       zoomControlsEnabled: false,
       initialCameraPosition: huaweiMap.CameraPosition(
         target: huaweiMapCustomerCoordinates,
@@ -659,19 +663,23 @@ class _FoodHistoryDetailsPageState extends State<FoodHistoryDetailsPage>
           huaweiMap.Marker(
               icon: huaweiMotorIcon,
               markerId: huaweiMap.MarkerId('0'),
-              position: huaweiMap.LatLng(riderTracking.lat, riderTracking.lng)),
+              position: huaweiMap.LatLng(riderTracking.lat,
+                  riderTracking.lng)),
         huaweiMap.Marker(
-            // icon: dropoffIcon,
+          // icon: dropoffIcon,
             markerId: huaweiMap.MarkerId('1'),
             infoWindow: huaweiMap.InfoWindow(
                 title: 'Customer Address',
-                snippet: widget.history.orderDeliveryAddress),
+                snippet: widget
+                    .history.orderDeliveryAddress),
             position: huaweiMapMerchantCoordinates),
         huaweiMap.Marker(
             icon: huaweiMapPickupIcon,
             markerId: huaweiMap.MarkerId('2'),
             infoWindow: huaweiMap.InfoWindow(
-                title: 'Shop Address', snippet: widget.history.shopFullAddress),
+                title: 'Shop Address',
+                snippet:
+                widget.history.shopFullAddress),
             position: huaweiMapCustomerCoordinates),
       ].toSet(),
       myLocationEnabled: false,

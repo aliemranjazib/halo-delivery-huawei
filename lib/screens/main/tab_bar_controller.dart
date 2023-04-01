@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:geolocator/geolocator.dart';
+import 'package:haloapp/components/bottom_app_bar.dart';
 import 'package:haloapp/components/custom_flushbar.dart';
 import 'package:haloapp/components/halo_loading.dart';
 import 'package:haloapp/main.dart';
@@ -32,9 +32,8 @@ import 'package:haloapp/utils/services/push_notifications.dart';
 import 'package:haloapp/utils/services/shared_pref_service.dart';
 import 'package:haloapp/components/custom_tab.dart' as halo;
 import 'package:haloapp/widget/social_login_container.dart';
+import 'package:location_permissions/location_permissions.dart';
 // import 'package:huawei_push/push.dart';
-// import 'package:location_permissions/location_permissions.dart'
-//     as location_permission;
 import 'package:url_launcher/url_launcher.dart';
 
 class TabBarPage extends StatefulWidget {
@@ -45,8 +44,7 @@ class TabBarPage extends StatefulWidget {
   TabBarPageState createState() => TabBarPageState();
 }
 
-class TabBarPageState extends State<TabBarPage>
-    with SingleTickerProviderStateMixin {
+class TabBarPageState extends State<TabBarPage> with SingleTickerProviderStateMixin {
   int _currentTabIndex = 0;
   DateTime _currentBackPressTime;
   bool _isLoading = true;
@@ -87,7 +85,7 @@ class TabBarPageState extends State<TabBarPage>
     tabController.addListener(onTap);
 
     User.currentTab.addListener(() {
-      if (!tabController.indexIsChanging) {
+      if(!tabController.indexIsChanging){
         tabController.animateTo(User.currentTab.value);
       }
     });
@@ -119,29 +117,25 @@ class TabBarPageState extends State<TabBarPage>
   }
 
   onTap() {
-    if (mounted) {
-      setState(() {
-        _currentTabIndex = tabController.index;
-        User.currentTab.value = _currentTabIndex;
-        index = tabController.index;
-      });
-      if ((tabController.index == 1 ||
-              tabController.index == 2 ||
-              tabController.index == 4) &&
-          User().getAuthToken() == null) {
-        tabController.index = tabController.previousIndex;
-        // return Navigator.pushNamedAndRemoveUntil(
-        //   context,
-        //   LoginPage.id,
-        //   (Route<dynamic> route) => false,
-        //   arguments: LoginArguments(true),
-        // );
-        return Navigator.pushNamed(
-          context,
-          LoginPage.id,
-          arguments: LoginArguments(true),
-        );
-      }
+    setState(() {
+      _currentTabIndex = tabController.index;
+      User.currentTab.value = _currentTabIndex;
+      index = tabController.index;
+    });
+    if ((tabController.index == 1 || tabController.index == 2 || tabController.index == 4) &&
+        User().getAuthToken() == null) {
+      tabController.index = tabController.previousIndex;
+      // return Navigator.pushNamedAndRemoveUntil(
+      //   context,
+      //   LoginPage.id,
+      //   (Route<dynamic> route) => false,
+      //   arguments: LoginArguments(true),
+      // );
+      return Navigator.pushNamed(
+        context,
+        LoginPage.id,
+        arguments: LoginArguments(true),
+      );
     }
 //    tabController.animateTo(tabController.index);
   }
@@ -152,20 +146,20 @@ class TabBarPageState extends State<TabBarPage>
   }
 
   Future<void> setupGPS() async {
-    // await Geolocator.requestPermission();
-    //
-    // location_permission.ServiceStatus serviceStatus =
-    //     await location_permission.LocationPermissions().checkServiceStatus();
-    //
-    // if (serviceStatus != location_permission.ServiceStatus.enabled) {
-    //   await showDialog(
-    //       context: context,
-    //       builder: (context) => CustomAlertDialog(
-    //             title: 'Halo App',
-    //             message: AppTranslations.of(context)
-    //                 .text('please_enable_location_service_in_phone_settings'),
-    //           ));
-    // }
+    await LocationPermissions().requestPermissions();
+
+    ServiceStatus serviceStatus =
+        await LocationPermissions().checkServiceStatus();
+
+    if (serviceStatus != ServiceStatus.enabled) {
+      await showDialog(
+          context: context,
+          builder: (context) => CustomAlertDialog(
+                title: 'Halo App',
+                message: AppTranslations.of(context)
+                    .text('please_enable_location_service_in_phone_settings'),
+              ));
+    }
 
     // if (serviceStatus != ServiceStatus.enabled) {
 
@@ -303,15 +297,15 @@ class TabBarPageState extends State<TabBarPage>
         String packageName = await PackageInfoService().getPackageName();
 
         url = 'market://details?id=' + packageName;
-        if (!(await canLaunchUrl(Uri.parse(url)))) {
+        if (!(await canLaunch(url))) {
           url = 'https://play.google.com/store/apps/details?id=' + packageName;
         }
       } else if (Platform.isIOS) {
         url = 'itms-apps://itunes.apple.com/my/app/id1525518223';
       }
 
-      if (await canLaunchUrl(Uri.parse(url))) {
-        launchUrl(Uri.parse(url));
+      if (await canLaunch(url)) {
+        launch(url);
       } else {
         print('Could not launch');
       }
@@ -330,25 +324,26 @@ class TabBarPageState extends State<TabBarPage>
       }
     } finally {}
 
-    if (_bannerModel.reviewBanner != null) {
+    if(_bannerModel.reviewBanner!=null){
       var langCode = await SharedPrefService().getLanguage();
-      String url = '';
+      String url= '';
       if (langCode == 'en') {
         url = _bannerModel.reviewBanner.en.imageUrl;
       } else if (langCode == 'ms') {
-        url = _bannerModel.reviewBanner.bm.imageUrl;
+        url =_bannerModel.reviewBanner.bm.imageUrl;
       } else {
         url = _bannerModel.reviewBanner.cn.imageUrl;
       }
 
-      if (url.isNotEmpty) {
+      if(url.isNotEmpty){
         showDialog(
             context: context,
             builder: (context) => BannerDialog(
-                  url: url,
-                ));
+              url: url,
+            ));
       }
     }
+
   }
 
   @override
@@ -362,10 +357,8 @@ class TabBarPageState extends State<TabBarPage>
             ? Scaffold(body: HaloLoading())
             : Scaffold(
                 bottomNavigationBar: Container(
-                  decoration: BoxDecoration(boxShadow: [
-                    BoxShadow(
-                        color: Colors.black.withOpacity(.1), blurRadius: 20)
-                  ]),
+                  decoration: BoxDecoration(
+                      boxShadow: [BoxShadow(color: Colors.black.withOpacity(.1), blurRadius: 20)]),
                   child: Container(
                     color: Colors.white,
                     child: SafeArea(
@@ -377,50 +370,39 @@ class TabBarPageState extends State<TabBarPage>
                         unselectedLabelColor: Colors.grey,
                         indicatorColor: Colors.transparent,
                         unselectedLabelStyle: TextStyle(fontSize: 8.0),
-                        labelStyle:
-                            TextStyle(fontFamily: poppinsMedium, fontSize: 7.0),
+                        labelStyle: TextStyle(fontFamily: poppinsMedium, fontSize: 7.0),
                         tabs: [
                           halo.Tab(
                               iconMargin: EdgeInsets.all(0),
-                              icon: getImageIcon("images/ic_home_selected.png",
-                                  "images/ic_home.png", 0),
+                              icon: getImageIcon(
+                                  "images/ic_home_selected.png", "images/ic_home.png", 0),
                               text: AppTranslations.of(context).text('home')),
                           halo.Tab(
                               iconMargin: EdgeInsets.all(0),
                               icon: getImageIcon(
-                                  "images/ic_history_selected.png",
-                                  "images/ic_history.png",
-                                  1),
-                              text:
-                                  AppTranslations.of(context).text('history')),
+                                  "images/ic_history_selected.png", "images/ic_history.png", 1),
+                              text: AppTranslations.of(context).text('history')),
+                          halo.Tab(
+                              iconMargin: EdgeInsets.all(0),
+                              icon: getImageIcon("images/ic_payment_tab_selected.png",
+                                  "images/ic_payment_tab.png", 2),
+                              text: AppTranslations.of(context).text('title_payment')),
                           halo.Tab(
                               iconMargin: EdgeInsets.all(0),
                               icon: getImageIcon(
-                                  "images/ic_payment_tab_selected.png",
-                                  "images/ic_payment_tab.png",
-                                  2),
-                              text: AppTranslations.of(context)
-                                  .text('title_payment')),
-                          halo.Tab(
-                              iconMargin: EdgeInsets.all(0),
-                              icon: getImageIcon(
-                                  "images/ic_message_selected.png",
-                                  "images/ic_message.png",
-                                  3),
+                                  "images/ic_message_selected.png", "images/ic_message.png", 3),
                               text: AppTranslations.of(context).text('chat')),
                           halo.Tab(
                               iconMargin: EdgeInsets.all(0),
-                              icon: getImageIcon("images/ic_user_selected.png",
-                                  "images/ic_user.png", 4),
-                              text:
-                                  AppTranslations.of(context).text('profile')),
+                              icon: getImageIcon(
+                                  "images/ic_user_selected.png", "images/ic_user.png", 4),
+                              text: AppTranslations.of(context).text('profile')),
                         ],
                       ),
                     ),
                   ),
                 ),
-                body:
-                    TabBarView(controller: tabController, children: _children),
+                body: TabBarView(controller: tabController, children: _children),
               ));
 
 //    return WillPopScope(
@@ -453,8 +435,7 @@ class TabBarPageState extends State<TabBarPage>
 //    );
   }
 
-  Widget getImageIcon(
-      String selectedAsset, String unselectAsset, int position) {
+  Widget getImageIcon(String selectedAsset, String unselectAsset, int position) {
     return Image.asset(
       _currentTabIndex == position ? selectedAsset : unselectAsset,
       width: 18,

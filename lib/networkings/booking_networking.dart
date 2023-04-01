@@ -33,7 +33,6 @@ class BookingNetworking {
         .postRequest(APIUrls().getCreateBookingUrl(), params);
 
     var decodedData = jsonDecode(response.body);
-
 //    print(decodedData);
     printWrapped(decodedData.toString());
 
@@ -69,8 +68,8 @@ class BookingNetworking {
         addresses: addresses,
       );
 
-      BookingModel().setPaymentMethods(
-          decodedData['return']['paymentMethodWithIcon'] ?? []);
+      BookingModel()
+          .setPaymentMethods(decodedData['return']['paymentMethod'] ?? []);
 
       return decodedData['msg'] ?? '';
     } else {
@@ -302,8 +301,7 @@ class BookingNetworking {
     if (response.statusCode == 200) {
       Map<String, dynamic> bookingDetail = decodedData['return'];
       print(bookingDetail);
-      return ActivityModel.fromJson(bookingDetail);
-    } else {
+      return ActivityModel.fromJson(bookingDetail);    } else {
       print('getActivity Failed: ' + decodedData['msg']);
       throw decodedData['msg'] ?? '';
     }

@@ -62,8 +62,7 @@ class _ActivitySupportAllPageState extends State<ActivitySupportAllPage> {
   // List<String> _announcements = [];
 
   void viewActivityDetails(BookingDetail bookDetail) {
-    Navigator.pushNamed(context, ActivitySupportDetailsPage.id,
-        arguments: bookDetail);
+    Navigator.pushNamed(context, ActivitySupportDetailsPage.id, arguments: bookDetail);
   }
 
   @override
@@ -86,8 +85,10 @@ class _ActivitySupportAllPageState extends State<ActivitySupportAllPage> {
         child: SafeArea(
           child: Container(
               padding: EdgeInsets.all(15.0),
-              child: SingleChildScrollView(
-                child: Column(
+              child:
+              SingleChildScrollView(
+                child:
+                Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
@@ -96,106 +97,76 @@ class _ActivitySupportAllPageState extends State<ActivitySupportAllPage> {
                     ),
                     (_activity.bookingDetail.length == 0)
                         ? Column(
-                            crossAxisAlignment: CrossAxisAlignment.stretch,
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: <Widget>[
-                              Text(
-                                AppTranslations.of(context).text('no_activity'),
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                    fontFamily: poppinsLight, fontSize: 16),
-                              )
-                            ],
-                          )
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          AppTranslations.of(context).text('no_activity'),
+                          textAlign: TextAlign.center,
+                          style: TextStyle(fontFamily: poppinsLight, fontSize: 16),
+                        )
+                      ],
+                    )
                         : ListView.builder(
-                            shrinkWrap: true,
-                            itemBuilder: (BuildContext context, int index) {
-                              return GestureDetector(
-                                onTap: () {
-                                  viewActivityDetails(
-                                      _activity.bookingDetail[index]);
-                                },
-                                behavior: HitTestBehavior.translucent,
-                                child: Container(
-                                  margin: EdgeInsets.symmetric(
-                                      horizontal: 6, vertical: 6),
-                                  padding: EdgeInsets.symmetric(
-                                      vertical: 6, horizontal: 6),
-                                  decoration: BoxDecoration(
-                                    color: Colors.white,
-                                    borderRadius:
-                                        BorderRadius.all(Radius.circular(3)),
-                                    boxShadow: [elevation],
-                                  ),
-                                  child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.start,
-                                    children: <Widget>[
-                                      Row(children: [
-                                        Text(
-                                            _activity.bookingDetail[index]
-                                                .orderStatus,
-                                            style: kLabelSemiBoldTextStyle),
-                                        Spacer(),
-                                        Text(
-                                          DatetimeFormatter()
-                                              .getFormattedDateStr(
-                                                  format: 'dd MMM yyyy hh:mm a',
-                                                  datetime: _activity
-                                                      .bookingDetail[index]
-                                                      .bookingDate
-                                                      .toString()),
-                                          style: TextStyle(color: Colors.grey),
-                                        ),
-                                      ]),
-                                      Divider(
-                                        thickness: 1,
-                                        color: lightGrey,
-                                      ),
+                        shrinkWrap: true,
+                        itemBuilder: (BuildContext context, int index) {
+                          return GestureDetector(
+                            onTap: () {
+                              viewActivityDetails(_activity.bookingDetail[index]);
+                            },
+                            behavior: HitTestBehavior.translucent,
+                            child: Container(
+                              margin: EdgeInsets.symmetric(horizontal: 6, vertical: 6),
+                              padding: EdgeInsets.symmetric(vertical: 6, horizontal: 6),
+                              decoration: BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(Radius.circular(3)),
+                                boxShadow: [elevation],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: <Widget>[
+                                  Row(children: [
+                                    Text(_activity.bookingDetail[index].orderStatus,style: kLabelSemiBoldTextStyle),
+                                    Spacer(),
+                                    Text(DatetimeFormatter().getFormattedDateStr(
+                                        format: 'dd MMM yyyy hh:mm a',
+                                        datetime: _activity.bookingDetail[index].bookingDate.toString()),style: TextStyle(color: Colors.grey),),
+                                  ]),
+                                  Divider(thickness: 1 , color:lightGrey ,),
+                                  Row(
+                                    children: [
+                                      Text( _activity.bookingDetail[index].itemType , style: kLabelSemiBoldTextStyle,),
+                                      Spacer(),
                                       Row(
                                         children: [
-                                          Text(
-                                            _activity
-                                                .bookingDetail[index].itemType,
-                                            style: kLabelSemiBoldTextStyle,
-                                          ),
-                                          Spacer(),
-                                          Row(
-                                            children: [
-                                              Text(
-                                                'RM ',
-                                                style: TextStyle(fontSize: 12),
-                                              ),
-                                              Text(
-                                                  _activity.bookingDetail[index]
-                                                      .totalPrice,
-                                                  style:
-                                                      kLabelSemiBoldTextStyle),
-                                            ],
-                                          ),
+                                          Text('RM ', style: TextStyle(fontSize: 12),),
+                                          Text( _activity.bookingDetail[index].totalPrice, style: kLabelSemiBoldTextStyle),
                                         ],
                                       ),
-                                      Text(
-                                          _activity.bookingDetail[index]
-                                              .bookingAddress[0].recipientName,
-                                          style: TextStyle(color: Colors.grey)),
                                     ],
                                   ),
-                                ),
-                              );
-                            },
-                            // separatorBuilder: (context, index) {
-                            //   return Padding(
-                            //     padding: EdgeInsets.symmetric(vertical: 10.0),
-                            //     child: Divider(
-                            //       color: Colors.black,
-                            //     ),
-                            //   );
-                            // },
-                            itemCount: _activity.bookingDetail.length),
+                                  Text(_activity.bookingDetail[index].bookingAddress[0].recipientName,style: TextStyle(color: Colors.grey)),
+                                ],
+                              ),
+                            ),
+                          );
+                        },
+                        // separatorBuilder: (context, index) {
+                        //   return Padding(
+                        //     padding: EdgeInsets.symmetric(vertical: 10.0),
+                        //     child: Divider(
+                        //       color: Colors.black,
+                        //     ),
+                        //   );
+                        // },
+                        itemCount: _activity.bookingDetail.length),
                   ],
                 ),
-              )),
+
+              )
+
+          ),
         ),
       ),
     );

@@ -8,9 +8,9 @@ import 'package:huawei_map/map.dart';
 class HuaweiMapWidget extends StatelessWidget {
   HuaweiMapWidget(
       {@required this.onMapCreated,
-      @required this.location,
-      this.markers,
-      this.polylines});
+        @required this.location,
+        this.markers,
+        this.polylines});
 
   final Function onMapCreated;
   final LatLng location;

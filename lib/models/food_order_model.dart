@@ -44,7 +44,6 @@ class FoodOrderModel {
   List<dynamic> _availableDates = [];
   int _deliveryInterval;
   String _overtimeStatus;
-  String _paymentMethodSelected;
 
   void clearFoodOrderData() {
     this._shop = null;
@@ -63,7 +62,6 @@ class FoodOrderModel {
     this._availableDates = [];
     this._deliveryInterval = null;
     this._overtimeStatus = null;
-    this._paymentMethodSelected = null;
   }
 
   int isSameFood(FoodOrderCart order) {
@@ -207,10 +205,6 @@ class FoodOrderModel {
     this._paymentMethod = method;
   }
 
-  void setPaymentMethodSelected(String selectMethod) {
-    this._paymentMethodSelected = selectMethod;
-  }
-
   void setOrderCart(List<FoodOrderCart> orders) {
     this._orderCart = orders;
     orderCartNotifier.value = List.from(orderCartNotifier.value)
@@ -265,7 +259,6 @@ class FoodOrderModel {
   String getPaymentMethod() => this._paymentMethod;
   List<dynamic> getPaymentMethods() => this._validPaymentMethods;
   String getOverTimeStatus() => this._overtimeStatus;
-  String getPaymentMethodSelected() => this._paymentMethodSelected;
 
   List<Map<String, dynamic>> getOrderCartParam() {
     List<Map<String, dynamic>> orderCartDataList = [];

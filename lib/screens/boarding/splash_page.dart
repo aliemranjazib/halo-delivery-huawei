@@ -11,7 +11,6 @@ import 'package:haloapp/utils/app_translations/app_translations.dart';
 import 'package:haloapp/utils/constants/custom_colors.dart';
 import 'package:haloapp/utils/constants/fonts.dart';
 import 'package:haloapp/utils/page_route_animation.dart';
-import 'package:haloapp/utils/services/location_service.dart';
 import 'package:haloapp/utils/services/package_info_service.dart';
 import 'package:haloapp/utils/services/push_notifications.dart';
 import 'package:haloapp/utils/services/shared_pref_service.dart';

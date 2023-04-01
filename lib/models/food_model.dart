@@ -10,8 +10,6 @@ class FoodModel {
   List<FoodVariantModel> variants;
   bool priceDiscountStatus;
   String priceDiscounted;
-  bool imgPromoTag;
-  String imgPromoTagText;
 
   FoodModel(
       {this.foodId,
@@ -22,7 +20,5 @@ class FoodModel {
       this.imageUrl,
       this.priceDiscounted,
       this.priceDiscountStatus,
-      this.variants,
-      this.imgPromoTag,
-      this.imgPromoTagText});
+      this.variants});
 }

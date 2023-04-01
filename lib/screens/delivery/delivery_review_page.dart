@@ -17,6 +17,7 @@ import 'package:haloapp/screens/delivery/delivery_payment_locations_dialog.dart'
 import 'package:haloapp/screens/general/confirmation_dialog.dart';
 import 'package:haloapp/screens/general/online_payment_page.dart';
 import 'package:haloapp/screens/general/payment_method_selection_dialog.dart';
+import 'package:haloapp/screens/main/home_page.dart';
 import 'package:haloapp/screens/main/tab_bar_controller.dart';
 import 'package:haloapp/utils/app_translations/app_translations.dart';
 import 'package:haloapp/utils/constants/api_urls.dart';

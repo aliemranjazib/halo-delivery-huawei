@@ -43,14 +43,14 @@
 	</array>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
-	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-    <string>Your current location will be displayed on the map and used to determine the location where we can provide you delivery service</string>
-    <key>NSLocationAlwaysUsageDescription</key>
-    <string>Your current location will be displayed on the map and used to determine the location where we can provide you delivery service</string>
-    <key>NSLocationWhenInUseUsageDescription</key>
-    <string>Your current location will be displayed on the map and used to determine the location where we can provide you delivery service</string>
 	<key>NSCameraUsageDescription</key>
 	<string>Access to camera to take picture and upload picture</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>Your current location will be displayed on the map and used to determine the location where we can provide you delivery service</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>Your current location will be displayed on the map and used to determine the location where we can provide you delivery service</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>Your current location will be displayed on the map and used to determine the location where we can provide you delivery service</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Access photo library for upload picture purpose</string>
 	<key>UIBackgroundModes</key>
@@ -107,24 +107,8 @@
           <key>CFBundleURLSchemes</key>
           <array>
             <string>halo</string>
-            <string>fb185752836921478</string>
-            <string>com.googleusercontent.apps.905459932446-nnmbvckrhka4b4eibcpco5k8abmprch6</string>
           </array>
         </dict>
       </array>
-      <key>NSBonjourServices</key>
-      <array>
-          <string>_dartobservatory._tcp</string>
-      </array>
-      <key>FirebaseAppDelegateProxyEnabled</key>
-      <false/>
-      <key>FacebookAutoLogAppEventsEnabled</key>
-      <string>TRUE</string>
-      <key>FacebookAdvertiserIDCollectionEnabled</key>
-      <string>TRUE</string>
-	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
-	<true/>
 </dict>
 </plist>

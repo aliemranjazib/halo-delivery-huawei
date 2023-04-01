@@ -1,7 +1,7 @@
-import 'package:huawei_location/location/fused_location_provider_client.dart';
-import 'package:huawei_location/location/location.dart';
-import 'package:huawei_location/location/location_request.dart';
-import 'package:huawei_location/permission/permission_handler.dart';
+import 'package:huawei_location/huawei_location.dart';
+// import 'package:huawei_location/location/fused_location_provider_client.dart';
+// import 'package:huawei_location/location/location.dart';
+// import 'package:huawei_location/location/location_request.dart';
 import 'package:location_permissions/location_permissions.dart';
 
 class LocationService {
@@ -60,7 +60,6 @@ class LocationService {
   }
 
   Future<bool> checkPermission() async {
-    final PermissionHandler _permissionHandler = PermissionHandler();
     ServiceStatus serviceStatus =
         await LocationPermissions().checkServiceStatus();
 

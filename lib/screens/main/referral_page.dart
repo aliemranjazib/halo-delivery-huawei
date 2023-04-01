@@ -62,8 +62,7 @@ class _ReferralsPageState extends State<ReferralsPage> {
       body: SafeArea(
         child: Container(
           height: double.infinity,
-          child:
-              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Stack(
               children: [
                 Container(
@@ -78,18 +77,12 @@ class _ReferralsPageState extends State<ReferralsPage> {
                 Padding(
                   padding: const EdgeInsets.all(32.0),
                   child: Text(
-                    AppTranslations.of(context).text('invite_friends') +
-                        '\n' +
-                        'Halo app!',
-                    style: TextStyle(
-                        fontFamily: poppinsRegular,
-                        fontSize: 14,
-                        color: Colors.white),
+                    AppTranslations.of(context).text('invite_friends') + '\n' + 'Halo app!',
+                    style: TextStyle(fontFamily: poppinsRegular, fontSize: 14, color: Colors.white),
                   ),
                 ),
                 Padding(
-                  padding:
-                      const EdgeInsets.only(top: 36, left: 16.0, right: 16),
+                  padding: const EdgeInsets.only(top: 36, left: 16.0, right: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -103,20 +96,17 @@ class _ReferralsPageState extends State<ReferralsPage> {
                           ),
                           Container(
                             width: double.infinity,
-                            padding: EdgeInsets.symmetric(
-                                vertical: 16, horizontal: 16),
+                            padding: EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                             decoration: BoxDecoration(
                               color: Colors.white,
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(3)),
+                              borderRadius: BorderRadius.all(Radius.circular(3)),
                               boxShadow: [elevation],
                             ),
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.center,
                               children: <Widget>[
                                 Text(
-                                  AppTranslations.of(context)
-                                      .text('share_ref_code'),
+                                  AppTranslations.of(context).text('share_ref_code'),
                                   style: TextStyle(fontSize: 14),
                                 ),
                                 SizedBox(
@@ -138,11 +128,10 @@ class _ReferralsPageState extends State<ReferralsPage> {
                                     ),
                                     GestureDetector(
                                       onTap: () {
-                                        Clipboard.setData(ClipboardData(
-                                            text: User().getUserRefCode()));
+                                        Clipboard.setData(
+                                            ClipboardData(text: User().getUserRefCode()));
                                         ScaffoldMessenger.of(context)
-                                            .showSnackBar(SnackBar(
-                                                content: Text("Copied")));
+                                            .showSnackBar(SnackBar(content: Text("Copied")));
                                       },
                                       child: Image.asset(
                                         'images/copy.png',
@@ -156,8 +145,7 @@ class _ReferralsPageState extends State<ReferralsPage> {
                                   height: 32,
                                 ),
                                 ActionButton(
-                                  buttonText: AppTranslations.of(context)
-                                      .text('invite_a_friend'),
+                                  buttonText: AppTranslations.of(context).text('invite_a_friend'),
                                   onPressed: () {
                                     share();
                                   },
@@ -191,7 +179,7 @@ class _ReferralsPageState extends State<ReferralsPage> {
                       borderRadius: BorderRadius.circular(3),
                     ),
                     child: GestureDetector(
-                      onTap: () {
+                      onTap: (){
                         Navigator.pushNamed(context, ReferralsDetailPage.id);
                       },
                       child: Padding(
@@ -205,7 +193,7 @@ class _ReferralsPageState extends State<ReferralsPage> {
                             Spacer(),
                             Text(
                               AppTranslations.of(context).text('view_all'),
-                              style: TextStyle(color: darkGrey, fontSize: 14),
+                              style: TextStyle(color: darkGrey , fontSize: 14),
                             ),
                             Icon(
                               Icons.chevron_right,
@@ -242,8 +230,7 @@ class _ReferralsPageState extends State<ReferralsPage> {
                       ),
                       Flexible(
                         child: Text(
-                          AppTranslations.of(context)
-                              .text('how_it_works_step_one'),
+                          AppTranslations.of(context).text('how_it_works_step_one'),
                           style: kLabelTextStyle,
                         ),
                       ),
@@ -263,8 +250,7 @@ class _ReferralsPageState extends State<ReferralsPage> {
                       ),
                       Flexible(
                         child: Text(
-                          AppTranslations.of(context)
-                              .text('how_it_works_step_two'),
+                          AppTranslations.of(context).text('how_it_works_step_two'),
                           style: kLabelTextStyle,
                         ),
                       ),
@@ -284,8 +270,7 @@ class _ReferralsPageState extends State<ReferralsPage> {
                       ),
                       Flexible(
                         child: Text(
-                          AppTranslations.of(context)
-                              .text('how_it_works_step_three'),
+                          AppTranslations.of(context).text('how_it_works_step_three'),
                           style: kLabelTextStyle,
                         ),
                       ),

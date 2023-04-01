@@ -8,14 +8,14 @@ class Vehicles {
         name: 'Motor',
         image: 'images/ic_motorcycle.png',
         description: 'Ideal for groceries, foods, small parcels',
-        description2: '',
+        description2: '(Starting at 2kg)',
       ),
       VehicleModel(
         id: '2',
         name: 'Car',
         image: 'images/ic_car.png',
         description: 'Ideal for medium item/ fragile / during rain',
-        description2: '',
+        description2: '(Starting at 5kg)',
       ),
     ];
   }

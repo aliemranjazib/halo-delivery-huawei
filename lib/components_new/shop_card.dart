@@ -25,13 +25,11 @@ class ShopCategoryRenderModel {
 class ShopCard extends StatelessWidget {
   ShopCard({
     this.shop,
-    this.shopType,
     this.callbackMethod,
   });
 
   // final List<int> cravings;
   final ShopModel shop;
-  String shopType;
   final Function callbackMethod;
 
   renderTextRowCategory(String key) {
@@ -88,7 +86,7 @@ class ShopCard extends StatelessWidget {
     );
   }
 
-  Widget renderTextRow(String key, String value) {
+  renderTextRow(String key, String value) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -121,29 +119,33 @@ class ShopCard extends StatelessWidget {
           ),
         ),
         Expanded(
-            child: Wrap(alignment: WrapAlignment.end, children: [
-          RatingBar.builder(
-            itemSize: 16,
-            ignoreGestures: true,
-            initialRating: double.parse(value),
-            minRating: 1,
-            direction: Axis.horizontal,
-            allowHalfRating: true,
-            itemCount: 5,
-            itemBuilder: (context, _) => Icon(
-              Icons.star,
-              color: Colors.amber,
-            ),
-            onRatingUpdate: (rating) {
-              print(rating);
-            },
-          ),
-          Text(
-            '(${shop.totalOrder})',
-            style: TextStyle(color: Colors.grey),
-            overflow: TextOverflow.ellipsis,
-          ),
-        ])),
+          child:Wrap(
+            alignment:WrapAlignment.end,
+            children:[
+              RatingBar.builder(
+                itemSize: 16,
+                ignoreGestures: true,
+                initialRating: double.parse(value),
+                minRating: 1,
+                direction: Axis.horizontal,
+                allowHalfRating: true,
+                itemCount: 5,
+                itemBuilder: (context, _) => Icon(
+                  Icons.star,
+                  color: Colors.amber,
+                ),
+                onRatingUpdate: (rating) {
+                  print(rating);
+                },
+              ),
+              Text(
+                '(${shop.totalOrder})',
+                style: TextStyle(color: Colors.grey),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ]
+          )
+        ),
       ],
     );
   }
@@ -177,7 +179,6 @@ class ShopCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    print("5656 ${shopType}");
     return Container(
       margin: EdgeInsets.only(left: 16, right: 16),
       child: GestureDetector(
@@ -186,12 +187,12 @@ class ShopCard extends StatelessWidget {
             context,
             MaterialPageRoute(
               builder: (context) => ShopMenuPage(
-                shopType: shopType,
                 shopUniqueCode: shop.uniqueCode,
                 shopInfo: shop,
               ),
             ),
           ).then((value) {
+            print(value);
             if (value is PopWithResults) {
               PopWithResults popResult = value;
               if (popResult.toPage == 'foodMain') {
@@ -203,11 +204,11 @@ class ShopCard extends StatelessWidget {
                 // pop to previous page
                 Navigator.of(context).pop(value);
               }
-            } else if (value is ShopMenuPageReturnResult) {
-              if (callbackMethod != null &&
-                  value.isFav != shop.shopUserFavourite) {
+            }else if(value is ShopMenuPageReturnResult){
+              if(callbackMethod!=null && value.isFav != shop.shopUserFavourite){
                 callbackMethod();
               }
+
             }
           });
         },
@@ -240,7 +241,9 @@ class ShopCard extends StatelessWidget {
                             vertical: 3.0, horizontal: 8.0),
                         color: kColorLightRed,
                         child: Text(
-                          shop.featuresDisplay,
+                          AppTranslations.of(context)
+                              .text('featured')
+                              .toUpperCase(),
                           style: TextStyle(
                               fontFamily: poppinsMedium,
                               fontSize: 11,
@@ -274,50 +277,38 @@ class ShopCard extends StatelessWidget {
                                 fontFamily: poppinsMedium, fontSize: 15),
                           ),
                         ),
-                        Visibility(
-                          visible: shopType == 'donation' ? false : true,
-                          child: GestureDetector(
-                            behavior: HitTestBehavior.translucent,
-                            child: Container(
-                              padding: EdgeInsets.only(left: 6.0, right: 6.0),
-                              child: Icon(
-                                  shop.shopUserFavourite
-                                      ? Icons.favorite
-                                      : Icons.favorite_border_outlined,
-                                  size: 20.0,
-                                  color: Colors.red),
-                            ),
-                            onTap: () {
-                              toggleFavShop(context);
-                            },
+                        GestureDetector(
+                          behavior: HitTestBehavior.translucent,
+                          child: Container(
+                            padding: EdgeInsets.only(left: 6.0,right: 6.0),
+                            child: Icon(
+                                shop.shopUserFavourite
+                                    ? Icons.favorite
+                                    : Icons.favorite_border_outlined,
+                                size: 20.0,
+                                color: Colors.red),
                           ),
+                          onTap: () {
+                            toggleFavShop(context);
+                          },
                         ),
                       ],
                       crossAxisAlignment: CrossAxisAlignment.start,
-                    ),
-                    Visibility(
-                      visible: shopType == 'donation' ? true : false,
-                      child: renderTextRow(
-                        AppTranslations.of(context).text('location'),
-                        '${(shop.city)}',
-                      ),
                     ),
                     renderTextRow(
                       AppTranslations.of(context).text('distance'),
                       '${(shop.distance).toStringAsFixed(1)} km',
                     ),
-
-                    // renderTextRow(
-                    //   AppTranslations.of(context).text('delivery_fee'),
-                    //   'RM ${(shop.shopDeliveryFee).toString()}',
-                    // ),
-                    // renderTextRowCategory(
-                    //   AppTranslations.of(context).text('category'),
-                    // ),
-                    if (shop.totalOrder != "0")
-                      renderRatingBar(
-                          AppTranslations.of(context).text('rating'),
-                          shop.rating),
+                    renderTextRow(
+                      AppTranslations.of(context).text('delivery_fee'),
+                      'RM ${(shop.shopDeliveryFee).toString()}',
+                    ),
+                    renderTextRowCategory(
+                      AppTranslations.of(context).text('category'),
+                    ),
+                    if(shop.totalOrder != "0")
+                    renderRatingBar(AppTranslations.of(context).text('rating'),
+                        shop.rating),
                     if (shop.shopStatus != 'open')
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -348,26 +339,23 @@ class ShopCard extends StatelessWidget {
                         ],
                       ),
                     SizedBox(height: 6.0),
-                    Visibility(
-                      visible: shopType == 'donation' ? false : true,
-                      child: Wrap(
-                        children: [
-                          ...shop.shopTag
-                              .map(
-                                (e) => Container(
-                                  margin: EdgeInsets.only(
-                                      right: 8, top: 3.0, bottom: 3.0),
-                                  child: ShopTag(
-                                    tag: e,
-                                    isHighlight: AppConfig
-                                        .consumerConfig.highlightCategory
-                                        .contains(e),
-                                  ),
+                    Wrap(
+                      children: [
+                        ...shop.shopTag
+                            .map(
+                              (e) => Container(
+                                margin: EdgeInsets.only(
+                                    right: 8, top: 3.0, bottom: 3.0),
+                                child: ShopTag(
+                                  tag: e,
+                                  isHighlight: AppConfig
+                                      .consumerConfig.highlightCategory
+                                      .contains(e),
                                 ),
-                              )
-                              .toList()
-                        ],
-                      ),
+                              ),
+                            )
+                            .toList()
+                      ],
                     ),
                   ],
                 ),

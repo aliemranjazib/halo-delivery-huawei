@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_hms_gms_availability/flutter_hms_gms_availability.dart';
 import 'package:haloapp/components/action_button.dart';
 import 'package:haloapp/components/custom_flushbar.dart';
 import 'package:haloapp/components/input_textfield.dart';
@@ -18,8 +19,6 @@ import 'package:haloapp/utils/services/push_notifications.dart';
 import 'package:haloapp/utils/services/shared_pref_service.dart';
 import 'package:haloapp/components/model_progress_hud.dart';
 import 'package:haloapp/utils/utils.dart';
-import 'package:flutter_hms_gms_availability/flutter_hms_gms_availability.dart';
-
 import 'dart:io' show Platform;
 
 import 'package:url_launcher/url_launcher.dart';
@@ -64,10 +63,7 @@ class _LoginPageState extends State<LoginPage> {
     Map<String, dynamic> info = await SharedPrefService().getLoginInfo();
     String username = info['username'];
     String password = info['password'];
-    if (username != null &&
-        username != '' &&
-        password != null &&
-        password != '') {
+    if (username != null && username != '' && password != null && password != '') {
       setState(() {
         _phoneNoTFValue = username;
         _passwordTFValue = password;
@@ -79,27 +75,21 @@ class _LoginPageState extends State<LoginPage> {
 
   void login(context) async {
     if (_phoneNoTFValue == null || _phoneNoTFValue.isEmpty) {
-      showSimpleFlushBar(
-          AppTranslations.of(context).text('please_enter_phone_number'),
-          context);
+      showSimpleFlushBar(AppTranslations.of(context).text('please_enter_phone_number'), context);
       return;
     }
 
     if (_passwordTFValue == null || _passwordTFValue.isEmpty) {
-      showSimpleFlushBar(
-          AppTranslations.of(context).text('please_enter_password'), context);
+      showSimpleFlushBar(AppTranslations.of(context).text('please_enter_password'), context);
       return;
     }
 
     PushNotificationsManager().init();
     String fcmToken = "";
     String huaweiToken = "";
-
-    huaweiToken = MyApp.huaweiToken;
-    fcmToken = await PushNotificationsManager().getFCMToken();
-    if (await FlutterHmsGmsAvailability.isHmsAvailable) {
+    if(await FlutterHmsGmsAvailability.isHmsAvailable){
       huaweiToken = MyApp.huaweiToken;
-    } else {
+    }else{
       fcmToken = await PushNotificationsManager().getFCMToken();
     }
     Map<String, dynamic> params = {
@@ -121,10 +111,9 @@ class _LoginPageState extends State<LoginPage> {
 
       print("Data: $data");
       if (data is String && data == 'login') {
-        SharedPrefService().setLoginInfo(_selectedCountry + _phoneNoTFValue,
-            _passwordTFValue, SharedPrefService.normalLogin);
-        Navigator.pushNamedAndRemoveUntil(
-            context, TabBarPage.id, (Route<dynamic> route) => false);
+        SharedPrefService().setLoginInfo(
+            _selectedCountry + _phoneNoTFValue, _passwordTFValue, SharedPrefService.normalLogin);
+        Navigator.pushNamedAndRemoveUntil(context, TabBarPage.id, (Route<dynamic> route) => false);
 
         setState(() {
           _phoneNoTFController.clear();
@@ -132,8 +121,7 @@ class _LoginPageState extends State<LoginPage> {
         });
 
         if (FoodOrderModel().getOfflineAddress().length > 0) {
-          await UserNetworking.saveAddress(
-              FoodOrderModel().getOfflineAddress());
+          await UserNetworking.saveAddress(FoodOrderModel().getOfflineAddress());
           FoodOrderModel().setOfflineAddress({});
         }
       } else if (data is String && data == 'app_update') {
@@ -141,13 +129,9 @@ class _LoginPageState extends State<LoginPage> {
       } else {
         if (data is Map<String, dynamic>) {
           String token = data["response"]["userToken"] ?? '';
-          Navigator.pushNamed(context, SMSVerificationPage.id, arguments: {
-            'tokenKey': token,
-            'phoneNumber': _phoneNoTFValue,
-          });
+          Navigator.pushNamed(context, SMSVerificationPage.id, arguments: token);
         } else {
-          showSimpleFlushBar(
-              AppTranslations.of(context).text('failed_to_load'), context);
+          showSimpleFlushBar(AppTranslations.of(context).text('failed_to_load'), context);
         }
       }
     } catch (e) {
@@ -176,15 +160,15 @@ class _LoginPageState extends State<LoginPage> {
         String packageName = await PackageInfoService().getPackageName();
 
         url = 'market://details?id=' + packageName;
-        if (!(await canLaunchUrl(Uri.parse(url)))) {
+        if (!(await canLaunch(url))) {
           url = 'https://play.google.com/store/apps/details?id=' + packageName;
         }
       } else if (Platform.isIOS) {
         url = 'itms-apps://itunes.apple.com/my/app/id1525518223';
       }
 
-      if (await canLaunchUrl(Uri.parse(url))) {
-        launchUrl(Uri.parse(url));
+      if (await canLaunch(url)) {
+        launch(url);
       } else {
         print('Could not launch');
       }
@@ -226,8 +210,7 @@ class _LoginPageState extends State<LoginPage> {
                             width: 150,
                             child: Transform(
                               alignment: FractionalOffset.center,
-                              transform: new Matrix4.identity()
-                                ..scale(2.3, 2.3),
+                              transform: new Matrix4.identity()..scale(2.3, 2.3),
                               child: Image.asset(
                                 'images/haloje_logo.png',
                                 height: 250,
@@ -288,8 +271,7 @@ class _LoginPageState extends State<LoginPage> {
                           },
                           controller: _phoneNoTFController,
                           inputType: TextInputType.number,
-                          hintText:
-                              AppTranslations.of(context).text('phone_number'),
+                          hintText: AppTranslations.of(context).text('phone_number'),
                         ),
                         SizedBox(
                           height: 20,
@@ -300,8 +282,7 @@ class _LoginPageState extends State<LoginPage> {
                             _passwordTFValue = value;
                           },
                           controller: _passwordTFController,
-                          hintText:
-                              AppTranslations.of(context).text('password'),
+                          hintText: AppTranslations.of(context).text('password'),
                         ),
                         SizedBox(
                           height: 30,
@@ -318,13 +299,10 @@ class _LoginPageState extends State<LoginPage> {
                             Navigator.pushNamed(context, ResetPasswordPage.id);
                           },
                           child: Text(
-                            AppTranslations.of(context)
-                                .text('forgot_password_ques'),
+                            AppTranslations.of(context).text('forgot_password_ques'),
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                                fontFamily: poppinsRegular,
-                                fontSize: 14,
-                                color: kColorLightRed),
+                                fontFamily: poppinsRegular, fontSize: 14, color: kColorLightRed),
                           ),
                         )
                       ],
@@ -347,8 +325,7 @@ class _LoginPageState extends State<LoginPage> {
                           onPressed: () {
                             Navigator.pushNamed(context, SignUpPage.id);
                           },
-                          buttonText:
-                              AppTranslations.of(context).text('register'),
+                          buttonText: AppTranslations.of(context).text('register'),
                         ),
                       ],
                     )

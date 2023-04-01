@@ -655,14 +655,12 @@ class _FoodHistoryDetailsPageState extends State<FoodHistoryDetailsPage>
                                     : Container(),
                                 (widget.history.orderMerchantRemark != '')
                                     ? Text(
-                                        AppTranslations.of(context).text(
-                                            'merchant_remark' +
-                                                ': ' +
-                                                widget.history
-                                                    .orderMerchantRemark),
-                                        textAlign: TextAlign.start,
-                                        style: kSmallLabelTextStyle,
-                                      )
+                                      AppTranslations.of(context)
+                                          .text('merchant_remark' + ': ' + widget.history.orderMerchantRemark),
+                                      textAlign: TextAlign.start,
+                                      style: kSmallLabelTextStyle,
+
+                                    )
                                     : Container()
                               ],
                             ),
@@ -781,7 +779,7 @@ class _FoodHistoryDetailsPageState extends State<FoodHistoryDetailsPage>
                               //           : true,
                               //   child: Container(
                               //     width: double.infinity,
-                              //     child: FlatButton(
+                              //     child: MaterialButton(
                               //       onPressed: () {
                               //         showDialog(
                               //           context: context,
@@ -903,17 +901,13 @@ class _FoodHistoryDetailsPageState extends State<FoodHistoryDetailsPage>
     return huaweiMap.HuaweiMap(
       onMapCreated: (huaweiMap.HuaweiMapController controller) {
         final huaweiMap.LatLng southwest = huaweiMap.LatLng(
-          min(huaweiMapMerchantCoordinates.lat,
-              huaweiMapCustomerCoordinates.lat),
-          min(huaweiMapMerchantCoordinates.lng,
-              huaweiMapCustomerCoordinates.lng),
+          min(huaweiMapMerchantCoordinates.lat, huaweiMapCustomerCoordinates.lat),
+          min(huaweiMapMerchantCoordinates.lng, huaweiMapCustomerCoordinates.lng),
         );
 
         final huaweiMap.LatLng northeast = huaweiMap.LatLng(
-          max(huaweiMapMerchantCoordinates.lat,
-              huaweiMapCustomerCoordinates.lat),
-          max(huaweiMapMerchantCoordinates.lng,
-              huaweiMapCustomerCoordinates.lng),
+          max(huaweiMapMerchantCoordinates.lat, huaweiMapCustomerCoordinates.lat),
+          max(huaweiMapMerchantCoordinates.lng, huaweiMapCustomerCoordinates.lng),
         );
 
         huaweiMap.LatLngBounds bounds = huaweiMap.LatLngBounds(
@@ -925,16 +919,18 @@ class _FoodHistoryDetailsPageState extends State<FoodHistoryDetailsPage>
         //     southwest: huaweiMapMerchantCoordinates,
         //     northeast: huaweiMapCustomerCoordinates
         // );
-        huaweiMap.CameraUpdate u2 =
-            huaweiMap.CameraUpdate.newLatLngBounds(bounds, 70);
+        huaweiMap.CameraUpdate u2 = huaweiMap.CameraUpdate.newLatLngBounds(bounds, 70);
         controller.animateCamera(u2);
       },
       gestureRecognizers: Set()
-        ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
-        ..add(Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()))
-        ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
+        ..add(Factory<PanGestureRecognizer>(
+                () => PanGestureRecognizer()))
+        ..add(Factory<ScaleGestureRecognizer>(
+                () => ScaleGestureRecognizer()))
+        ..add(Factory<TapGestureRecognizer>(
+                () => TapGestureRecognizer()))
         ..add(Factory<VerticalDragGestureRecognizer>(
-            () => VerticalDragGestureRecognizer())),
+                () => VerticalDragGestureRecognizer())),
       zoomControlsEnabled: false,
       initialCameraPosition: huaweiMap.CameraPosition(
         target: huaweiMapCustomerCoordinates,
@@ -945,19 +941,23 @@ class _FoodHistoryDetailsPageState extends State<FoodHistoryDetailsPage>
           huaweiMap.Marker(
               icon: huaweiMotorIcon,
               markerId: huaweiMap.MarkerId('0'),
-              position: huaweiMap.LatLng(riderTracking.lat, riderTracking.lng)),
+              position: huaweiMap.LatLng(riderTracking.lat,
+                  riderTracking.lng)),
         huaweiMap.Marker(
-            // icon: dropoffIcon,
+          // icon: dropoffIcon,
             markerId: huaweiMap.MarkerId('1'),
             infoWindow: huaweiMap.InfoWindow(
                 title: 'Customer Address',
-                snippet: widget.history.orderDeliveryAddress),
+                snippet: widget
+                    .history.orderDeliveryAddress),
             position: huaweiMapMerchantCoordinates),
         huaweiMap.Marker(
             icon: huaweiMapPickupIcon,
             markerId: huaweiMap.MarkerId('2'),
             infoWindow: huaweiMap.InfoWindow(
-                title: 'Shop Address', snippet: widget.history.shopFullAddress),
+                title: 'Shop Address',
+                snippet:
+                widget.history.shopFullAddress),
             position: huaweiMapCustomerCoordinates),
       ].toSet(),
       myLocationEnabled: false,

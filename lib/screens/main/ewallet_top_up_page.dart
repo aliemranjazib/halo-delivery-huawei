@@ -62,19 +62,7 @@ class _EwalletTopUpPageState extends State<EwalletTopUpPage> {
     if (widget.requiredAmount > 0) {
       selectTopUpAmount(widget.requiredAmount);
     }
-
-    EwalletNetworking().getTopUpPaymentMethodList().then((result) {
-      for (var element in result) {
-        _paymentMethods.add(TopUpMethodModel(
-            paymentIsActive: true,
-            paymentType: element['method_name'],
-            paymentTitle: element['method_display_name'],
-            paymentIcon: element['method_icon_url']));
-      }
-      setState(() {});
-    });
-
-    // _paymentMethods.addAll(AppConfig.paymentMethods);
+    _paymentMethods.addAll(AppConfig.paymentMethods);
     topUpAmount.clear();
     topUpAmount.addAll(AppConfig.consumerConfig.topUpAmount);
   }
@@ -101,7 +89,6 @@ class _EwalletTopUpPageState extends State<EwalletTopUpPage> {
               SingleChildScrollView(
                 child: Container(
                   padding: EdgeInsets.all(10.0),
-                  margin: EdgeInsets.only(bottom: 70.0),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
@@ -215,19 +202,11 @@ class _EwalletTopUpPageState extends State<EwalletTopUpPage> {
                                   padding: EdgeInsets.symmetric(vertical: 10.0),
                                   child: Row(
                                     children: [
-                                      (_paymentMethods[index].paymentIcon ==
-                                              null)
-                                          ? Image.asset(
-                                              'images/ic_e_wallet.png',
-                                              width: 50.0,
-                                              height: 40.0,
-                                            )
-                                          : Image.network(
-                                              _paymentMethods[index]
-                                                  .paymentIcon,
-                                              width: 50.0,
-                                              height: 40.0,
-                                            ),
+                                      Image.asset(
+                                        _paymentMethods[index].paymentIcon,
+                                        width: 50.0,
+                                        height: 40.0,
+                                      ),
                                       SizedBox(
                                         width: 10.0,
                                       ),
@@ -249,9 +228,8 @@ class _EwalletTopUpPageState extends State<EwalletTopUpPage> {
               Align(
                 alignment: Alignment.bottomCenter,
                 child: Container(
-                  color: Colors.white,
-                  // margin: EdgeInsets.only(bottom: 10.0),
-                  padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10),
+                  margin: EdgeInsets.only(bottom: 10.0),
+                  padding: EdgeInsets.symmetric(horizontal: 10.0),
                   child: ActionButton(
                     buttonText:
                         "${AppTranslations.of(context).text("title_top_up")}",
@@ -335,7 +313,7 @@ class _EwalletTopUpPageState extends State<EwalletTopUpPage> {
       }
     } catch (e) {
       print(e.toString());
-      showSimpleFlushBar(e.toString(), context);
+      showSimpleFlushBar(e, context);
     } finally {
       setState(() {
         _showSpinner = false;
@@ -394,7 +372,7 @@ class _EwalletTopUpPageState extends State<EwalletTopUpPage> {
     Map<String, dynamic> params = {
       "apiKey": APIUrls().getWebApiKey(),
       "data": {
-        "authNumber": "$paymentId",
+        "authNumber": "${paymentId}",
         "paymentMethod": "${_paymentMethods[selectedPaymentMethod].paymentType}"
       }
     };

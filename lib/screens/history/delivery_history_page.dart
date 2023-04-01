@@ -236,6 +236,7 @@ class _DeliveryHistoryPageState extends State<DeliveryHistoryPage> {
             itemCount: _foodHistories.length,
             itemBuilder: (BuildContext context, int index) {
               FoodHistoryModel foodHistory = _foodHistories[index];
+              print("foodHistory.shopPartner ${foodHistory.shopPartner}");
               double width = MediaQuery.of(context).size.width * 0.60;
 
               return Column(

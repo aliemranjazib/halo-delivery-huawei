@@ -37,7 +37,7 @@ import 'package:url_launcher/url_launcher.dart';
 
 import '../../main.dart';
 
-class LoginArguments {
+class LoginArguments{
   bool isShowBack;
   LoginArguments(this.isShowBack);
 }
@@ -88,16 +88,15 @@ class _LoginPageState extends State<LoginPage> {
     _passwordTFController = TextEditingController(text: _passwordTFValue);
   }
 
-  void checkMaintenance() async {
+  void checkMaintenance()async{
     // var position = await LocationService.getLastKnownLocation();
     // if(position!=null){
-    await HomeNetworking.initAppConfig();
+      await HomeNetworking.initAppConfig();
 
-    if (AppConfig.isUnderMaintenance.value &&
-        !AppConfig.isShowMaintenancePage) {
-      AppConfig.isShowMaintenancePage = true;
-      Navigator.pushNamed(context, UpdateServerPage.id);
-    }
+      if(AppConfig.isUnderMaintenance.value && !AppConfig.isShowMaintenancePage){
+        AppConfig.isShowMaintenancePage = true;
+        Navigator.pushNamed(context, UpdateServerPage.id);
+      }
     // }
   }
 
@@ -107,18 +106,16 @@ class _LoginPageState extends State<LoginPage> {
     String password = info['password'];
     String socialType = info["socialType"];
     String socialModel = info["socialModelKey"];
-    if (socialModel != null && socialModel.isNotEmpty) {
+    if(socialModel!=null && socialModel.isNotEmpty){
       socialLoginInfoModel = socialInfoModelFromJson(socialModel);
     }
 
-    if (socialType != null) {
-      if (socialType != SharedPrefService.normalLogin) {
-        if (socialType != null &&
-            socialType.isNotEmpty &&
-            socialLoginInfoModel != null) {
+    if(socialType!=null){
+      if(socialType != SharedPrefService.normalLogin){
+        if(socialType!=null && socialType.isNotEmpty && socialLoginInfoModel != null){
           socialLogin(context);
         }
-      } else {
+      }else{
         if (username != null &&
             username != '' &&
             password != null &&
@@ -163,16 +160,12 @@ class _LoginPageState extends State<LoginPage> {
 
     Map<String, dynamic> params = {
       "data": {
-        "socialEmail":
-            socialLoginInfoModel != null ? socialLoginInfoModel.email : null,
-        "socialName":
-            socialLoginInfoModel != null ? socialLoginInfoModel.name : null,
-        "socialId":
-            socialLoginInfoModel != null ? socialLoginInfoModel.userId : null,
-        "socialType":
-            socialLoginInfoModel != null ? socialLoginInfoModel.type : null,
-        "fcmToken": fcmToken,
-        "huaweiToken": huaweiToken
+        "socialEmail": socialLoginInfoModel != null ? socialLoginInfoModel.email : null,
+        "socialName": socialLoginInfoModel != null ? socialLoginInfoModel.name : null,
+        "socialId": socialLoginInfoModel != null ? socialLoginInfoModel.userId : null,
+        "socialType": socialLoginInfoModel != null ? socialLoginInfoModel.type : null,
+        "fcmToken":fcmToken,
+        "huaweiToken":huaweiToken
       }
     };
 
@@ -187,6 +180,8 @@ class _LoginPageState extends State<LoginPage> {
 
       print("Data: $data");
       if (data is String && data == 'login') {
+
+
         setState(() {
           _phoneNoTFController.clear();
           _passwordTFController.clear();
@@ -201,17 +196,17 @@ class _LoginPageState extends State<LoginPage> {
         SharedPrefService().setSocialLoginInfo(socialLoginInfoModel);
         Navigator.pushNamedAndRemoveUntil(
             context, TabBarPage.id, (Route<dynamic> route) => false);
+
       } else if (data is String && data == 'app_update') {
         _showAppUpdateDialog();
       } else {
         if (data is Map<String, dynamic>) {
           String token = data["response"]["userToken"] ?? '';
           var arguments = {
-            "tokenKey": token,
-            "socialInfoModel": socialInfoModelToJson(socialLoginInfoModel)
+            "tokenKey":token,
+            "socialInfoModel":socialInfoModelToJson(socialLoginInfoModel)
           };
-          Navigator.pushNamed(context, SocialMergePage.id,
-              arguments: arguments);
+          Navigator.pushNamed(context, SocialMergePage.id, arguments: arguments);
         } else {
           showSimpleFlushBar(
               AppTranslations.of(context).text('failed_to_load'), context);
@@ -275,6 +270,7 @@ class _LoginPageState extends State<LoginPage> {
 
       print("Data: $data");
       if (data is String && data == 'login') {
+
         setState(() {
           _phoneNoTFController.clear();
           _passwordTFController.clear();
@@ -286,22 +282,21 @@ class _LoginPageState extends State<LoginPage> {
           FoodOrderModel().setOfflineAddress({});
         }
 
-        SharedPrefService().setLoginInfo(_selectedCountry + _phoneNoTFValue,
-            _passwordTFValue, SharedPrefService.normalLogin);
+        SharedPrefService()
+            .setLoginInfo(_selectedCountry + _phoneNoTFValue, _passwordTFValue,SharedPrefService.normalLogin);
         // Navigator.popUntil(this.context, (Route<dynamic> route) => false);
         // Navigator.of(context).popUntil((route) => route.isFirst);
         // Navigator.pushNamed(this.context, TabBarPage.id);
-        Navigator.of(this.context).pushNamedAndRemoveUntil(
-            TabBarPage.id, (Route<dynamic> route) => false);
+        Navigator.of(this.context).pushNamedAndRemoveUntil(TabBarPage.id, (Route<dynamic> route) => false);
+
+
       } else if (data is String && data == 'app_update') {
         _showAppUpdateDialog();
       } else {
         if (data is Map<String, dynamic>) {
           String token = data["response"]["userToken"] ?? '';
-          Navigator.pushNamed(context, SMSVerificationPage.id, arguments: {
-            'tokenKey': token,
-            'phoneNumber': _phoneNoTFValue,
-          });
+          Navigator.pushNamed(this.context, SMSVerificationPage.id,
+              arguments: token);
         } else {
           showSimpleFlushBar(
               AppTranslations.of(context).text('failed_to_load'), context);
@@ -351,9 +346,8 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     print("SETTING -- ${ModalRoute.of(context).settings.arguments}");
-    if (ModalRoute.of(context).settings.arguments != null) {
-      loginArguments =
-          ModalRoute.of(context).settings.arguments as LoginArguments;
+    if(ModalRoute.of(context).settings.arguments!=null){
+      loginArguments = ModalRoute.of(context).settings.arguments as LoginArguments;
     }
 
     return GestureDetector(
@@ -369,16 +363,18 @@ class _LoginPageState extends State<LoginPage> {
         appBar: AppBar(
           backgroundColor: Colors.white,
           centerTitle: true,
-          leading: (loginArguments != null && loginArguments.isShowBack)
-              ? IconButton(
-                  icon: arrowBack,
-                  onPressed: () => {Navigator.pop(context)},
-                )
-              : null,
-          automaticallyImplyLeading:
-              (loginArguments != null && loginArguments.isShowBack),
-          title: Text(AppTranslations.of(context).text('login_title'),
-              textAlign: TextAlign.center, style: kAppBarTextStyle),
+          leading:
+          (loginArguments!=null && loginArguments.isShowBack)?
+          IconButton(
+            icon: arrowBack,
+            onPressed: () => {Navigator.pop(context)},
+          ):null,
+          automaticallyImplyLeading:  (loginArguments!=null && loginArguments.isShowBack),
+          title: Text(
+            AppTranslations.of(context).text('login_title'),
+            textAlign: TextAlign.center,
+            style: kAppBarTextStyle
+          ),
           actions: [
             // IconButton(
             //   icon: Icon(
@@ -487,7 +483,7 @@ class _LoginPageState extends State<LoginPage> {
                           controller: _phoneNoTFController,
                           inputType: TextInputType.number,
                           hintText:
-                              AppTranslations.of(context).text('phone_number'),
+                          AppTranslations.of(context).text('phone_number'),
                         ),
                         PasswordInputBLBRBorderTextField(
                           onChange: (value) {
@@ -536,12 +532,11 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                     SocialLoginContainer(
                       enable: !_showSpinner,
-                      socialListenerCallback: (bool isLoading,
-                          SocialLoginInfoModel socialLoginInfo) async {
+                      socialListenerCallback: (bool isLoading, SocialLoginInfoModel socialLoginInfo)async{
                         setState(() {
                           this._showSpinner = isLoading;
                         });
-                        if (socialLoginInfo != null) {
+                        if(socialLoginInfo!=null){
                           setState(() {
                             this.socialLoginInfoModel = socialLoginInfo;
                           });

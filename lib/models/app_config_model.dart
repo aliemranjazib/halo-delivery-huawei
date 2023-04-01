@@ -211,7 +211,6 @@ class AppConfig {
       shopTag: details['shop_tag'] ?? [],
       freeDeliveryStatus: (details['shop_free_delivery_status'] == 'true') ? true : false,
       featuresStatus: (details['shop_features_status'] == 'true') ? true : false,
-      featuresDisplay: details['shop_feature_tag'] ?? '',
       totalOrder: details['shop_total_order'] ?? '',
       rating: details['shop_rating'] ?? '0.0',
       shopOpenType: details['shop_open_type'] ?? '',

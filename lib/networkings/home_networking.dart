@@ -58,9 +58,9 @@ class HomeNetworking {
   static initAppConfig([position]) async {
     String authToken = User().getAuthToken();
 
-    try{
+    try {
       Map<String, String> headers = await APIUrls().getHeader();
-      if(authToken!=null){
+      if (authToken != null) {
         headers.addAll({
           "Authorization": authToken,
         });
@@ -70,11 +70,11 @@ class HomeNetworking {
           APIUrls().getAppConfigUrl(),
           position != null
               ? {
-            "data": {
-              'lat': position['latitude'],
-              'lng': position['longitude']
-            }
-          }
+                  "data": {
+                    'lat': position['latitude'],
+                    'lng': position['longitude']
+                  }
+                }
               : {},
           headers);
 
@@ -85,15 +85,16 @@ class HomeNetworking {
       print('### RESET');
 
       return;
-    }catch(e){
+    } catch (e) {
       print(e);
     }
 
     String jsonContent;
-    String url = 'https://halorider.oss-ap-southeast-3.aliyuncs.com/appConfig/consumer_default_config.json';
+    String url =
+        'https://halorider.oss-ap-southeast-3.aliyuncs.com/appConfig/consumer_default_config.json';
 
     try {
-      var bodyRaw = (await HTTP.get(url)).bodyBytes;
+      var bodyRaw = (await HTTP.get(Uri.parse(url))).bodyBytes;
       jsonContent = Utf8Decoder().convert(bodyRaw);
       print('http success');
     } catch (err) {
@@ -104,12 +105,13 @@ class HomeNetworking {
 
     print(jsonContent);
 
-    try{
+    try {
       // AppConfig().configJson(jsonDecode(jsonContent));
       var decodedData = jsonDecode(jsonContent);
       AppConfig().fromJson(decodedData['response']);
-    }catch(e){
-      jsonContent = await FileHelper.getFileData("assets/configs/consumer_config.json");
+    } catch (e) {
+      jsonContent =
+          await FileHelper.getFileData("assets/configs/consumer_config.json");
       AppConfig().configJson(jsonDecode(jsonContent));
       print(e);
     }

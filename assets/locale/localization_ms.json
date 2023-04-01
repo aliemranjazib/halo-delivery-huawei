@@ -1,23 +1,5 @@
 {
-
-  "charity":"amal jariah",
-
-
-  "points": "mata",
-  "halo_points": "Halo mata",
-  "you_have_earned": "Anda telah memperoleh",
-  "redeem": "Tebus",
-  "points_expiring_on": "mata tamat tempoh pada",
-  "points_istory": "Mata Sejarah",
-  "redeem_Halo_ponts": "Tebus Halo mata",
-  "convert_halo_points": "Tukarkan anda Halo menunjuk ke arah Halo baki dompet",
-  "redeem_successful": "Tebus Berjaya",
-  "date_and_time": "tarikh dan masa",
-  "redeem_amount": "Tebus Amaun",
-  "done": "Selesai",
-
-
-  "type_your_address_here": "Taip alamat anda di sini",
+  "type_your_address_here": "Taip alamat anda di sini ",
   "allow_name_to_save_address": "Sila berikan nama untuk menyimpan alamat",
   "label_for_your_own_ref": "cth: untuk rujukan anda ",
   "valid_zip_code": "Poskod Salah",
@@ -515,7 +497,5 @@
   "delete_account" : "Delete account",
   "delete_account_confirm": "Are you sure to delete your account? ",
   "change_address": "Change address",
-  "out_of_delivery_zone": "Out Of Delivery Zone",
-  "super_jimat": "Super Jimat"
-
+  "out_of_delivery_zone": "Out Of Delivery Zone"
 }

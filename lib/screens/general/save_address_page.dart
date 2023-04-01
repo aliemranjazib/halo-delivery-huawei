@@ -75,26 +75,29 @@ class _SaveAddressPageState extends State<SaveAddressPage> {
   Set<huaweiMap.Polygon> _huaweiPolygons = Set<huaweiMap.Polygon>();
   huaweiMap.LatLng _huaweiDroppin;
 
-  void _setPolygon(List<dynamic> data) async {
-    print("data123 : $data");
-    if (data != null && data.length > 0) {
-      for (int i = 0; i < data.length; i++) {
-        List<huaweiMap.LatLng> polygonLatLngs = [];
+  void _setPolygon(List<dynamic> data) async{
+     print("data123 : $data");
+     if (data != null && data.length > 0) {
+       for (int i = 0; i < data.length; i++) {
 
-        for (int j = 0; j < data[i].length; j++) {
-          polygonLatLngs.add(huaweiMap.LatLng(data[i][j].lat, data[i][j].lng));
-        }
+         List<huaweiMap.LatLng> polygonLatLngs = [];
 
-        final String polygonIdVal = '';
-        _huaweiPolygons.add(huaweiMap.Polygon(
-          polygonId: huaweiMap.PolygonId('polygon$i'),
-          points: polygonLatLngs,
-          strokeWidth: 3,
-          strokeColor: kColorRed.withOpacity(.2),
-          fillColor: Colors.red.withOpacity(0.1),
-        ));
-      }
-    }
+         for(int j = 0 ; j<data[i].length ; j++){
+           polygonLatLngs.add(huaweiMap.LatLng(
+               data[i][j].lat,data[i][j].lng
+           ));
+         }
+
+         final String polygonIdVal = '';
+         _huaweiPolygons.add(huaweiMap.Polygon(
+           polygonId: huaweiMap.PolygonId('polygon$i'),
+           points: polygonLatLngs,
+           strokeWidth: 3,
+           strokeColor: kColorRed.withOpacity(.2),
+           fillColor: Colors.red.withOpacity(0.1),
+         ));
+       }
+     }
 //    if (await FlutterHmsGmsAvailability.isHmsAvailable) {
 //
 //
@@ -114,6 +117,7 @@ class _SaveAddressPageState extends State<SaveAddressPage> {
 //        }
 //      }
 //    }
+
   }
 
   @override
@@ -122,7 +126,7 @@ class _SaveAddressPageState extends State<SaveAddressPage> {
     Future.delayed(const Duration(milliseconds: 500), () {
       _preventDrag = false;
     });
-    if (widget.am != null) {
+    if(widget.am != null){
       print("zip --> ${widget.am.zip}");
       _zip = _zipc.text = widget.am.zip;
     }
@@ -136,8 +140,7 @@ class _SaveAddressPageState extends State<SaveAddressPage> {
 
     getZone();
 
-    _huaweiDroppin = huaweiMap.LatLng(
-        num.tryParse(widget.am.lat.toString()).toDouble(),
+    _huaweiDroppin = huaweiMap.LatLng(num.tryParse(widget.am.lat.toString()).toDouble(),
         num.tryParse(widget.am.lng.toString()).toDouble());
 
 //    FlutterHmsGmsAvailability.isHmsAvailable.then((value){
@@ -154,6 +157,7 @@ class _SaveAddressPageState extends State<SaveAddressPage> {
 //      });
 //    });
 
+
     super.initState();
   }
 
@@ -168,8 +172,7 @@ class _SaveAddressPageState extends State<SaveAddressPage> {
           icon: arrowBack,
           onPressed: () => {Navigator.pop(context)},
         ),
-        title: Text(
-          AppTranslations.of(context).text('delivery_locations'),
+        title: Text(AppTranslations.of(context).text('delivery_locations'),
           style: kAppBarTextStyle,
         ),
       ),
@@ -180,7 +183,7 @@ class _SaveAddressPageState extends State<SaveAddressPage> {
             child: Column(
               children: [
                 Stack(
-                  clipBehavior: Clip.none,
+                  // overflow: Overflow.visible,
                   children: [
                     Container(
                       height: 260,
@@ -299,9 +302,7 @@ class _SaveAddressPageState extends State<SaveAddressPage> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           Text(
-                            '  ' +
-                                AppTranslations.of(context)
-                                    .text('address_nickname'),
+                            '  ' + AppTranslations.of(context).text('address_nickname'),
                             textAlign: TextAlign.left,
                             style: TextStyle(
                                 fontFamily: poppinsMedium, height: 2.5),
@@ -473,11 +474,14 @@ class _SaveAddressPageState extends State<SaveAddressPage> {
   Widget getMap() {
     return huaweiMap.HuaweiMap(
       gestureRecognizers: Set()
-        ..add(Factory<PanGestureRecognizer>(() => PanGestureRecognizer()))
-        ..add(Factory<ScaleGestureRecognizer>(() => ScaleGestureRecognizer()))
-        ..add(Factory<TapGestureRecognizer>(() => TapGestureRecognizer()))
+        ..add(Factory<PanGestureRecognizer>(
+                () => PanGestureRecognizer()))
+        ..add(Factory<ScaleGestureRecognizer>(
+                () => ScaleGestureRecognizer()))
+        ..add(Factory<TapGestureRecognizer>(
+                () => TapGestureRecognizer()))
         ..add(Factory<VerticalDragGestureRecognizer>(
-            () => VerticalDragGestureRecognizer())),
+                () => VerticalDragGestureRecognizer())),
       zoomControlsEnabled: false,
       polygons: _huaweiPolygons,
       initialCameraPosition: huaweiMap.CameraPosition(
@@ -493,12 +497,14 @@ class _SaveAddressPageState extends State<SaveAddressPage> {
         widget.am.buildingName = '';
         widget.am.city = '';
         widget.am.unitNo = '';
-        widget.am.lat = _position.target.lat.toString();
-        widget.am.lng = _position.target.lng.toString();
-        _huaweiDroppin =
-            huaweiMap.LatLng(_position.target.lat, _position.target.lng);
+        widget.am.lat =
+            _position.target.lat.toString();
+        widget.am.lng =
+            _position.target.lng.toString();
+        _huaweiDroppin = huaweiMap.LatLng(_position.target.lat,
+            _position.target.lng);
         // setState(() {});
-        print("widget.am.lat  ${widget.am.lat} ${_position.target.lng}");
+         print("widget.am.lat  ${widget.am.lat } ${_position.target.lng}");
       }),
       // markers: [
       //   Marker(

@@ -10,6 +10,13 @@ class APIUrls {
   //Switch this to PRODUCTION_ENVIRONMENT when generate Production app
   static const ENVIRONMENT = PRODUCTION_ENVIRONMENT;
 
+
+
+
+
+
+
+
   static get uri {
     if (ENVIRONMENT == STAGING_ENVIRONMENT) {
       return 'https://stagingapi.halo.express';
@@ -95,7 +102,6 @@ class APIUrls {
   static const _nearbyShops = '/Consumer/shop/nearby';
   static const _nearbyFeaturedShops = '/Consumer/shop/nearbyFeature';
   static const _nearbySearchShops = '/Consumer/shop/nearbySearch';
-  static const _nearbyPromoItem = '/Consumer/shop/nearbyPromoItem';
   static const _shopDetails = '/Consumer/shop/detail';
   static const _zoneList = "/Consumer/zone/list";
   static const _shopReviews = '/Consumer/shop/shopReview';
@@ -117,17 +123,13 @@ class APIUrls {
   static const _walletTopUp = "/Wallet/topup";
   static const _walletTopUpCalculation = "/Wallet/topupCalculation";
   static const _walletCheckStatus = "/payment/billPlzCheckStatus";
-  static const _walletTopUpPaymentMethodList =
-      "/Consumer/booking/getAvailableOnlinePaymentMethod";
 
   //Referrals
   static const _referralDetails = "/user/referralSummary";
 
   //Change payment
-  static const _availableOnlinePaymentMethod =
-      "/Consumer/booking/getAvailableOnlinePaymentMethod";
-  static const _updatePaymentCalculate =
-      "/Consumer/order/updatePaymentMethodCalculate";
+  static const _availableOnlinePaymentMethod = "/Consumer/booking/getAvailableOnlinePaymentMethod";
+  static const _updatePaymentCalculate = "/Consumer/order/updatePaymentMethodCalculate";
   static const _updatePaymentMethod = "/Consumer/order/updatePaymentMethod";
 
   Future<Map<String, String>> getHeader() async {
@@ -212,7 +214,6 @@ class APIUrls {
   String getHomeInfo() => _foodUri + _homeInfo;
   String getNearbyShopUrl() => _foodUri + _nearbyShops;
   String getNearbyFeaturedShopUrl() => _foodUri + _nearbyFeaturedShops;
-  String getNearbyPromoItemUrl() => _foodUri + _nearbyPromoItem;
 
   String getShopReview() => _foodUri + _shopReviews;
 
@@ -239,7 +240,6 @@ class APIUrls {
   String getWalletTopUp() => _userUri + _walletTopUp;
   String getWalletTopUpCalculation() => _userUri + _walletTopUpCalculation;
   String getWalletCheckStatus() => _userUri + _walletCheckStatus;
-  String getTopUpPaymentMethodList() => _uri + _walletTopUpPaymentMethodList;
 
   //Change payment
   String getAvailableOnlineMethods() => _uri + _availableOnlinePaymentMethod;

@@ -1,33 +1,4 @@
 {
-
-  "charity":"Charity",
-
-
-  "points": "Points",
-  "halo_points": "Halo Points",
-  "you_have_earned": "You have earned",
-  "redeem": "Redeem",
-  "points_expiring_on": "points expiring on",
-  "points_istory": "Points History",
-  "redeem_Halo_ponts": "Redeem Halo Ponts",
-  "convert_halo_points": "Convert your Halo points to Halo wallet balance",
-  "redeem_successful": "Redeem Successful",
-  "date_and_time": "Date & Time",
-  "redeem_amount": "Redeem Amount",
-  "done": "Done",
-
-  
-
-
-
-  
-
-
-
-
-
-
-
   "type_your_address_here": "Type your address here...",
   "provide_name_to_save_address": "Please provide a name to save address",
   "label_for_your_own_ref": "eg: Label for your own reference",
@@ -525,8 +496,7 @@
   "delete_account" : "Delete account",
   "delete_account_confirm": "Are you sure to delete your account? ",
   "change_address": "Change address",
-  "out_of_delivery_zone": "Out Of Delivery Zone",
-  "super_jimat": "Super Jimat"
+  "out_of_delivery_zone": "Out Of Delivery Zone"
 
 
 }

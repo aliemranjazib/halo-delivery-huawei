@@ -21,7 +21,6 @@ import 'package:haloapp/models/order_for_later_model.dart';
 import 'package:haloapp/models/shop_menu_model.dart';
 import 'package:haloapp/models/shop_model.dart';
 import 'package:haloapp/models/user_model.dart';
-import 'package:haloapp/models/payment_method_model.dart';
 import 'package:haloapp/networkings/ewallet_networking.dart';
 import 'package:haloapp/networkings/food_history_networking.dart';
 import 'package:haloapp/networkings/food_networking.dart';
@@ -71,14 +70,13 @@ class _FoodCartPageState extends State<FoodCartPage> {
   String _cartUserEmail = User().getUserEmail();
   String _cartUserPhone = User().getUserPhone();
 
-  String _selectedPaymentMethod = FoodOrderModel().getPaymentMethodSelected();
-  String _selectedBookDate = '';
-  String _selectedBookTime = '';
+  String _selectedPaymentMethod = FoodOrderModel().getPaymentMethod() ?? 'cod';
+  String _selectedBookDate;
+  String _selectedBookTime;
   Map _validatedCoupon = {};
   bool _forceSelectPaymentType = true;
   List<Coupon> _coupons = [];
   BannerModel _bannerModel = BannerModel();
-  List<DynamicPaymentMethodModel> _paymentMethods = [];
 
   @override
   void initState() {
@@ -96,20 +94,8 @@ class _FoodCartPageState extends State<FoodCartPage> {
     });
     super.initState();
     _initiateSelectedDateAndTime();
-
     _initCouponList();
-    _initPaymentMethods();
     _initWalletBalance();
-  }
-
-  _initPaymentMethods() async {
-    FoodOrderModel().getPaymentMethods().forEach((element) {
-      _paymentMethods.add(DynamicPaymentMethodModel(
-        name: element['method_name'],
-        title: element['method_display_name'],
-        image: element['method_icon_url'],
-      ));
-    });
   }
 
   _initWalletBalance() async {
@@ -332,8 +318,6 @@ class _FoodCartPageState extends State<FoodCartPage> {
             selectedBookDate: _selectedBookDate,
             selectedBookTime: _selectedBookTime,
             validatedCoupon: _validatedCoupon,
-            paymentMethod: _paymentMethods
-                .firstWhere((e) => e.name == _selectedPaymentMethod),
           ),
         ),
       );
@@ -662,66 +646,63 @@ class _FoodCartPageState extends State<FoodCartPage> {
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: <Widget>[
                                 Container(
-                                    padding: EdgeInsets.symmetric(
-                                      horizontal: 15.0,
-                                      vertical: 10.0,
-                                    ),
-                                    color: Colors.white,
-                                    child: widget.shop.showPreOrderStatus
-                                        ? DateTimeSelectionView(
-                                            dateTitle:
-                                                AppTranslations.of(context)
-                                                    .text('delivery_date'),
-                                            timeTitle:
-                                                AppTranslations.of(context)
-                                                    .text('delivery_time'),
-                                            dateSelections: FoodOrderModel()
-                                                .getAvailableDates(),
-                                            timeSelections:
-                                                getTimesForSelectedDate(),
-                                            interval: FoodOrderModel()
-                                                .getDeliveryInterval(),
-                                            onDateSelected: (date) {
-                                              setState(() {
-                                                _selectedBookDate = date;
-                                                _couponCodeTFValue = '';
-                                                _validatedCoupon = {};
-                                              });
-                                            },
-                                            onTimeSelected: (time) {
-                                              setState(() {
-                                                _selectedBookTime = time;
-                                                _couponCodeTFValue = '';
-                                                _validatedCoupon = {};
-                                              });
-                                            },
-                                            selectedDate: _selectedBookDate,
-                                            selectedTime: _selectedBookTime,
-                                          )
-                                        : Container()
-                                    // DateSelectionView(
-                                    //   dateTitle: AppTranslations.of(context).text('delivery_date'),
-                                    //   timeTitle: AppTranslations.of(context).text('delivery_time'),
-                                    //   dateSelections: FoodOrderModel().getAvailableDates(),
-                                    //   timeSelections: getTimesForSelectedDate(),
-                                    //   interval: FoodOrderModel().getDeliveryInterval(),
-                                    //   onDateSelected: (date) {
-                                    //     setState(() {
-                                    //       _selectedBookDate = date;
-                                    //       _couponCodeTFValue = '';
-                                    //       _validatedCoupon = {};
-                                    //     });
-                                    //   },
-                                    //   onTimeSelected: (time) {
-                                    //     setState(() {
-                                    //       _selectedBookTime = '';
-                                    //       _couponCodeTFValue = '';
-                                    //       _validatedCoupon = {};
-                                    //     });
-                                    //   },
-                                    //   selectedDate: _selectedBookDate,
-                                    //   selectedTime: '',)
-                                    ),
+                                  padding: EdgeInsets.symmetric(
+                                    horizontal: 15.0,
+                                    vertical: 10.0,
+                                  ),
+                                  color: Colors.white,
+                                  child: widget.shop.showPreOrderStatus
+                                      ? DateTimeSelectionView(
+                                          dateTitle: AppTranslations.of(context)
+                                              .text('delivery_date'),
+                                          timeTitle: AppTranslations.of(context)
+                                              .text('delivery_time'),
+                                          dateSelections: FoodOrderModel()
+                                              .getAvailableDates(),
+                                          timeSelections:
+                                              getTimesForSelectedDate(),
+                                          interval: FoodOrderModel()
+                                              .getDeliveryInterval(),
+                                          onDateSelected: (date) {
+                                            setState(() {
+                                              _selectedBookDate = date;
+                                              _couponCodeTFValue = '';
+                                              _validatedCoupon = {};
+                                            });
+                                          },
+                                          onTimeSelected: (time) {
+                                            setState(() {
+                                              _selectedBookTime = time;
+                                              _couponCodeTFValue = '';
+                                              _validatedCoupon = {};
+                                            });
+                                          },
+                                          selectedDate: _selectedBookDate,
+                                          selectedTime: _selectedBookTime,
+                                        )
+                                      : DateSelectionView(
+                                    dateTitle: AppTranslations.of(context).text('delivery_date'),
+                                    timeTitle: AppTranslations.of(context).text('delivery_time'),
+                                    dateSelections: FoodOrderModel().getAvailableDates(),
+                                    timeSelections: getTimesForSelectedDate(),
+                                    interval: FoodOrderModel().getDeliveryInterval(),
+                                    onDateSelected: (date) {
+                                      setState(() {
+                                        _selectedBookDate = date;
+                                        _couponCodeTFValue = '';
+                                        _validatedCoupon = {};
+                                      });
+                                    },
+                                    onTimeSelected: (time) {
+                                      setState(() {
+                                        _selectedBookTime = '';
+                                        _couponCodeTFValue = '';
+                                        _validatedCoupon = {};
+                                      });
+                                    },
+                                    selectedDate: _selectedBookDate,
+                                    selectedTime: '',),
+                                ),
                                 Visibility(
                                   visible:
                                       FoodOrderModel().getOverTimeStatus() ==
@@ -1031,10 +1012,8 @@ class _FoodCartPageState extends State<FoodCartPage> {
                                 ),
                                 SizedBox(height: 20.0),
                                 PaymentMethodSelectionBox(
-                                  // paymentMethod: PaymentMethod()
-                                  //     .getPaymentMethod(_selectedPaymentMethod),
-                                  paymentMethod: _paymentMethods.firstWhere(
-                                      (e) => e.name == _selectedPaymentMethod),
+                                  paymentMethod: PaymentMethod()
+                                      .getPaymentMethod(_selectedPaymentMethod),
                                   isShowBalance: true,
                                   onPressed: () {
                                     _openPaymentMethodDialog();

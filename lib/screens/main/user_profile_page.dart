@@ -8,7 +8,6 @@ import 'package:haloapp/screens/auth/change_profile_page.dart';
 import 'package:haloapp/screens/main/account_security_page.dart';
 import 'package:haloapp/screens/main/activity_support_page.dart';
 import 'package:haloapp/screens/main/notification_list_page.dart';
-import 'package:haloapp/screens/main/points/points_page.dart';
 import 'package:haloapp/screens/main/referral_page.dart';
 import 'package:haloapp/screens/main/webview_page.dart';
 import 'package:haloapp/utils/app_translations/app_translations.dart';
@@ -49,7 +48,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
         child: Container(
           child: User().getUsername() == null
               ? Center(
-                  child: ElevatedButton(
+                  child: MaterialButton(
                   child: Text('login'),
                   onPressed: () {},
                 ))
@@ -159,14 +158,6 @@ class _UserProfilePageState extends State<UserProfilePage> {
                                 },
                               ),
                               ProfileOption(
-                                icon: 'images/new/points.png',
-                                label:
-                                    AppTranslations.of(context).text('Points'),
-                                onPressed: () {
-                                  Navigator.pushNamed(context, PointsPage.id);
-                                },
-                              ),
-                              ProfileOption(
                                 icon: 'images/ic_referral.png',
                                 label: AppTranslations.of(context)
                                     .text('referrals'),
@@ -193,8 +184,7 @@ class _UserProfilePageState extends State<UserProfilePage> {
                               ),
                               ProfileOption(
                                 icon: 'images/ic_faq.png',
-                                label:
-                                    AppTranslations.of(context).text('support'),
+                                label: AppTranslations.of(context).text('support'),
                                 onPressed: () {
                                   Navigator.pushNamed(
                                       context, ActivitySupportPage.id);

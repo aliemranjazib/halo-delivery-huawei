@@ -196,7 +196,8 @@ class _DeliveryHistoryDetailsPageState
             icon: arrowBack,
             onPressed: () {
               Navigator.pop(context, _needRefreshList);
-            }),
+            }
+            ),
       ),
       body: ModalProgressHUD(
         inAsyncCall: _showSpinner,
@@ -412,84 +413,76 @@ class _DeliveryHistoryDetailsPageState
                           ),
                         ),
                         (details.orderStatus == 'completed')
-                            ? Column(
-                                crossAxisAlignment: CrossAxisAlignment.stretch,
-                                children: <Widget>[
-                                  Container(
-                                    color: Colors.white,
-                                    padding: EdgeInsets.symmetric(
-                                        vertical: 10, horizontal: 15),
-                                    child: Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: <Widget>[
-                                        Text(
-                                          AppTranslations.of(context)
-                                              .text('your_reviews'),
-                                          textAlign: TextAlign.center,
-                                          style: kTitleTextStyle.copyWith(
-                                              fontSize: 14),
-                                        ),
-                                        SizedBox(height: 10.0),
-                                        TitleDetailsRow(
-                                          titleText: AppTranslations.of(context)
-                                              .text('comment'),
-                                          detailText:
-                                              (details.customerComment != '')
-                                                  ? details.customerComment
-                                                  : AppTranslations.of(context)
-                                                      .text('no_comment'),
-                                        ),
-                                        SizedBox(height: 15.0),
-                                        (details.customerRating == '0')
-                                            ? Container(
-                                                width: double.infinity,
-                                                child: ActionButton(
-                                                  onPressed: () {
-                                                    showRatingDialog();
-                                                  },
-                                                  buttonText:
-                                                      AppTranslations.of(
-                                                              context)
-                                                          .text('review'),
-                                                ),
-                                              )
-                                            : Container(),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              )
-                            : Container(),
+                        ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
                         Container(
-                          margin: EdgeInsets.only(left: 16, right: 16),
+                          color: Colors.white,
+                          padding: EdgeInsets.symmetric(
+                              vertical: 10, horizontal: 15),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: <Widget>[
+                              Text(
+                                AppTranslations.of(context)
+                                    .text('your_reviews'),
+                                textAlign: TextAlign.center,
+                                style: kTitleTextStyle.copyWith(fontSize: 14),
+                              ),
+                              SizedBox(height: 10.0),
+                              TitleDetailsRow(
+                                titleText: AppTranslations.of(context)
+                                    .text('comment'),
+                                detailText:
+                                (details.customerComment != '')
+                                    ? details.customerComment
+                                    : AppTranslations.of(context)
+                                    .text('no_comment'),
+                              ),
+                              SizedBox(height: 15.0),
+                              (details.customerRating == '0')
+                                  ? Container(
+                                width: double.infinity,
+                                child: ActionButton(
+                                  onPressed: () {
+                                    showRatingDialog();
+                                  },
+                                  buttonText: AppTranslations.of(context).text('review'),
+                                ),
+                              )
+                                  : Container(),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                        : Container(),
+                        Container(
+                          margin: EdgeInsets.only(left: 16,right: 16),
                           width: double.infinity,
                           child: MaterialButton(
                             onPressed: () {
                               BookingDetail bookingDetail = new BookingDetail();
                               List<BookingAddress> bookingAddressList = [];
-                              BookingAddress bookingAddress =
-                                  new BookingAddress();
+                              BookingAddress bookingAddress = new BookingAddress();
                               bookingAddress.recipientName = '';
                               bookingAddressList.add(bookingAddress);
-                              bookingDetail.bookingNumber =
-                                  details.bookingNumber;
+                              bookingDetail.bookingNumber = details.bookingNumber;
                               bookingDetail.orderStatus = details.orderStatus;
                               bookingDetail.totalPrice = details.totalPrice;
                               bookingDetail.bookingAddress = bookingAddressList;
                               bookingDetail.itemType = 'Express';
-                              bookingDetail.bookingDate =
-                                  details.pickupDatetime;
-                              Navigator.pushNamed(
-                                  context, ActivitySupportDetailsPage.id,
-                                  arguments: bookingDetail);
+                              bookingDetail.bookingDate = details.pickupDatetime;
+                              Navigator.pushNamed(context, ActivitySupportDetailsPage.id, arguments: bookingDetail);
                             },
                             color: kColorRed,
                             textColor: Colors.white,
                             child: Text(
                               AppTranslations.of(context).text('contact_us'),
                               style: TextStyle(
-                                  fontFamily: poppinsMedium, fontSize: 15),
+                                  fontFamily: poppinsMedium,
+                                  fontSize: 15
+                              ),
                             ),
                           ),
                         ),
@@ -554,30 +547,30 @@ class _DeliveryHistoryDetailsPageState
               style: kDetailsTextStyle),
         ],
       ),
-      if (details.paymentMethod == "haloWalletCod")
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(AppTranslations.of(context).text('haloWallet'),
-                style: kDetailsTextStyle),
-            SizedBox(width: 10.0),
-            Text(
-                '${AppTranslations.of(context).text('currency_my')} ${(details.bookingHaloWalletAmount != '' ? details.bookingHaloWalletAmount : '0.00')}',
-                style: kDetailsTextStyle),
-          ],
-        ),
-      if (details.paymentMethod == "haloWalletCod")
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: <Widget>[
-            Text(AppTranslations.of(context).text('cod'),
-                style: kDetailsTextStyle),
-            SizedBox(width: 10.0),
-            Text(
-                '${AppTranslations.of(context).text('currency_my')} ${(details.bookingCodAmount != '' ? details.bookingCodAmount : '0.00')}',
-                style: kDetailsTextStyle),
-          ],
-        ),
+      if(details.paymentMethod == "haloWalletCod")
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(AppTranslations.of(context).text('haloWallet'),
+              style: kDetailsTextStyle),
+          SizedBox(width: 10.0),
+          Text(
+              '${AppTranslations.of(context).text('currency_my')} ${(details.bookingHaloWalletAmount != '' ? details.bookingHaloWalletAmount : '0.00')}',
+              style: kDetailsTextStyle),
+        ],
+      ),
+      if(details.paymentMethod == "haloWalletCod")
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: <Widget>[
+          Text(AppTranslations.of(context).text('cod'),
+              style: kDetailsTextStyle),
+          SizedBox(width: 10.0),
+          Text(
+              '${AppTranslations.of(context).text('currency_my')} ${(details.bookingCodAmount != '' ? details.bookingCodAmount : '0.00')}',
+              style: kDetailsTextStyle),
+        ],
+      ),
       Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: <Widget>[

@@ -99,65 +99,69 @@ class FoodTypeContainer extends StatelessWidget {
               style: kTitleBoldTextStyle.copyWith(color: titleColor)),
         ),
         Container(
-            width: MediaQuery.of(context).size.width,
-            height: 95.0,
-            margin: EdgeInsets.symmetric(vertical: 6.0),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-            ),
-            child: ListView.separated(
-                padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 2.0),
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (BuildContext context, int index) {
-                  var e = foodOptions[index];
-                  getContainerSize(context);
-                  return GestureDetector(
-                      onTap: () {
-                        onClickIcon(e);
-                      },
-                      behavior: HitTestBehavior.translucent,
-                      child: Container(
-                        padding: EdgeInsets.symmetric(vertical: 6.0),
-                        width: getContainerSize(context),
-                        child: Column(
-                          children: [
-                            Container(
-                              padding: EdgeInsets.all(2.0),
-                              child: Image.network(
-                                e.iconUrl,
-                                width: 55.0,
-                                height: 55.0,
-                                fit: BoxFit.cover,
-                              ),
-                            ),
-                            Text(
-                              e.iconName,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              textAlign: TextAlign.center,
-                              style:
-                                  kSmallLabelTextStyle.copyWith(fontSize: 10.0),
-                            )
-                          ],
+          width: MediaQuery.of(context).size.width,
+          height: 95.0,
+          margin: EdgeInsets.symmetric( vertical: 6.0),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.all(Radius.circular(5)),
+          ),
+          child: ListView.separated(
+            padding: EdgeInsets.symmetric(horizontal: 10.0,vertical: 2.0),
+            scrollDirection: Axis.horizontal,
+            itemBuilder: (BuildContext context, int index){
+              var e = foodOptions[index];
+              getContainerSize(context);
+              return GestureDetector(
+                  onTap: () {
+                    onClickIcon(e);
+                  },
+                  behavior: HitTestBehavior.translucent,
+                  child: Container(
+                    padding: EdgeInsets.symmetric(vertical: 6.0),
+                    width: getContainerSize(context),
+                    child: Column(
+                      children: [
+                        Container(
+                          padding: EdgeInsets.all(2.0),
+                          child: Image.network(
+                            e.iconUrl,
+                            width: 55.0,
+                            height: 55.0,
+                            fit: BoxFit.cover,
+                          ),
                         ),
-                      ));
-                },
-                separatorBuilder: (BuildContext context, int index) {
-                  return Container(
-                    width: 0.0,
-                  );
-                },
-                itemCount: foodOptions.length)),
+                        Text(
+                          e.iconName,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: kSmallLabelTextStyle.copyWith(
+                            fontSize: 10.0
+                          ),
+                        )
+                      ],
+                    ),
+                  )
+              );
+            },
+            separatorBuilder: (BuildContext context, int index){
+              return Container(
+                width: 0.0,
+              );
+            },
+            itemCount: foodOptions.length
+          )
+        ),
       ],
     );
   }
 
-  double getContainerSize(BuildContext context) {
+  double getContainerSize(BuildContext context){
     var width = MediaQuery.of(context).size.width;
-    var actualWidth = width - (50.0) - (6.0 * 4);
+    var actualWidth = width - (50.0) -(6.0*4);
     // print(width);
     // print((80.0 * 4.5) + (6.0 * 4) + 30.0);
     // print(actualWidth/4.5);
-    return (actualWidth / 4.5);
+    return (actualWidth/4.5);
   }
 }

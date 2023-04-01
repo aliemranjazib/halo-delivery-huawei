@@ -12,7 +12,6 @@ import 'package:haloapp/models/food_history_model.dart';
 import 'package:haloapp/models/food_order_model.dart';
 import 'package:haloapp/models/shop_model.dart';
 import 'package:haloapp/models/user_model.dart';
-import 'package:haloapp/models/payment_method_model.dart';
 import 'package:haloapp/networkings/food_history_networking.dart';
 import 'package:haloapp/networkings/food_networking.dart';
 import 'package:haloapp/screens/general/custom_alert_dialog.dart';
@@ -30,7 +29,7 @@ import 'dart:math' as math;
 
 class ConfirmOrderPage extends StatefulWidget {
   ConfirmOrderPage({
-    this.shop,
+    @required this.shop,
     this.couponCodeTFValue,
     this.remarksTFValue,
     this.cartUserName,
@@ -39,7 +38,6 @@ class ConfirmOrderPage extends StatefulWidget {
     this.selectedBookDate,
     this.selectedBookTime,
     this.validatedCoupon,
-    this.paymentMethod,
   });
 
   final ShopModel shop;
@@ -52,7 +50,6 @@ class ConfirmOrderPage extends StatefulWidget {
   final String selectedBookDate;
   final String selectedBookTime;
   final Map validatedCoupon;
-  final DynamicPaymentMethodModel paymentMethod;
 
   @override
   _ConfirmOrderPageState createState() => _ConfirmOrderPageState();
@@ -67,6 +64,7 @@ class _ConfirmOrderPageState extends State<ConfirmOrderPage> {
   List<FoodOrderCart> _items = FoodOrderModel().getOrderCart();
   AddressModel _currentAddress = FoodOrderModel().getDeliveryAddress();
   String _finalPrice = FoodOrderModel().getFinalPrice();
+  String _selectedPaymentMethod = FoodOrderModel().getPaymentMethod() ?? 'cod';
   Timer _timer;
   int countDown = 0;
 
@@ -232,21 +230,17 @@ class _ConfirmOrderPageState extends State<ConfirmOrderPage> {
             children: [
               Container(
                 padding: EdgeInsets.only(right: 8),
-                child: (widget.paymentMethod.image == null)
-                    ? Image.asset(
-                        'images/halo_logo.png',
-                        width: 24,
-                        height: 24,
-                      )
-                    : Image.network(
-                        widget.paymentMethod.image,
-                        width: 24,
-                        height: 24,
-                      ),
+                child: Image.asset(
+                  PaymentMethod()
+                      .getPaymentMethod(_selectedPaymentMethod)
+                      .image,
+                  width: 24,
+                  height: 24,
+                ),
               ),
               Expanded(
                 child: Text(
-                  widget.paymentMethod.title,
+                  AppTranslations.of(context).text(_selectedPaymentMethod),
                 ),
               ),
               Text(
@@ -328,7 +322,7 @@ class _ConfirmOrderPageState extends State<ConfirmOrderPage> {
         "couponName": widget.couponCodeTFValue ?? '',
         "orderUniqueKey": FoodOrderModel().getOrderUniqueKey(),
         "remark": widget.remarksTFValue ?? '',
-        "paymentMethod": widget.paymentMethod.name,
+        "paymentMethod": _selectedPaymentMethod,
         "userPhone": _cartUserPhone,
         "userEmail": _cartUserEmail,
         "userName": _cartUserName,

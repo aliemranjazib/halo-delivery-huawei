@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:haloapp/components/action_button.dart';
 import 'package:haloapp/components/custom_flushbar.dart';
 import 'package:haloapp/components/model_progress_hud.dart';
@@ -11,7 +10,6 @@ import 'package:haloapp/models/user_model.dart';
 import 'package:haloapp/networkings/user_networking.dart';
 import 'package:haloapp/screens/food/food_main_page.dart';
 import 'package:haloapp/screens/general/save_address_page.dart';
-import 'package:haloapp/screens/main/food_main_page.dart';
 import 'package:haloapp/utils/app_translations/app_translations.dart';
 import 'package:haloapp/utils/constants/custom_colors.dart';
 import 'package:haloapp/utils/constants/fonts.dart';
@@ -20,7 +18,8 @@ import 'package:haloapp/utils/debouncer.dart';
 import 'package:haloapp/utils/services/google_map_places_service.dart';
 import "package:google_maps_webservice/places.dart";
 import 'package:haloapp/utils/services/location_service.dart';
-import 'package:huawei_location/location/location.dart' as huaweiLocation;
+// import 'package:huawei_location/location/location.dart' as huaweiLocation;
+import 'package:huawei_location/huawei_location.dart' as huaweiLocation;
 import 'package:huawei_map/components/latLng.dart';
 
 class FindAddressPage extends StatefulWidget {
@@ -36,7 +35,7 @@ class _FindAddressPageState extends State<FindAddressPage> {
   List savedAddress = List();
   String _customAddress = '';
   TextEditingController _customAddressController = TextEditingController();
-  dynamic position;
+  huaweiLocation.Location position;
   bool _popMode;
   bool _bookingMode = false;
 
@@ -124,6 +123,7 @@ class _FindAddressPageState extends State<FindAddressPage> {
     } catch (e) {
       print(e);
     }
+
     setState(() {});
   }
 

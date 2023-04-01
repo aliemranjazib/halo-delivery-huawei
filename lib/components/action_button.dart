@@ -326,8 +326,7 @@ class ActionWithColorButton extends StatelessWidget {
   final Function onPressed;
   final Color butColor;
 
-  ActionWithColorButton(
-      {@required this.buttonText, this.onPressed, this.icon, this.butColor});
+  ActionWithColorButton({@required this.buttonText, this.onPressed, this.icon,this.butColor});
 
   @override
   Widget build(BuildContext context) {
@@ -335,7 +334,7 @@ class ActionWithColorButton extends StatelessWidget {
       highlightColor: Colors.white.withOpacity(.1),
       splashColor: Colors.white.withOpacity(.2),
       onPressed: onPressed,
-      color: butColor != null ? butColor : kColorRed,
+      color: butColor!=null ? butColor : kColorRed,
       padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 15.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),
@@ -370,8 +369,7 @@ class ActionSmallButton extends StatelessWidget {
   final Function onPressed;
   final Color butColor;
 
-  ActionSmallButton(
-      {@required this.buttonText, this.onPressed, this.icon, this.butColor});
+  ActionSmallButton({@required this.buttonText, this.onPressed, this.icon,this.butColor});
 
   @override
   Widget build(BuildContext context) {
@@ -379,7 +377,7 @@ class ActionSmallButton extends StatelessWidget {
       highlightColor: Colors.white.withOpacity(.1),
       splashColor: Colors.white.withOpacity(.2),
       onPressed: onPressed,
-      color: butColor != null ? butColor : kColorRed,
+      color: butColor!=null ? butColor : kColorRed,
       padding: EdgeInsets.symmetric(horizontal: 5.0, vertical: 3.0),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10),

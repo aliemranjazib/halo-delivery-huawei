@@ -61,7 +61,7 @@ class _ShopListPageState extends State<ShopListPage> {
       });
     } catch (e) {
       print(e.toString());
-      // showSimpleFlushBar(e.toString(), context);
+      showSimpleFlushBar(e.toString(), context);
     } finally {
       setState(() {
         _showSpinner = false;
@@ -103,20 +103,19 @@ class _ShopListPageState extends State<ShopListPage> {
         ),
         body: SafeArea(
           child: SingleChildScrollView(
-            child: _shops != null && _shops.length > 0
-                ? Container(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        SearchBarInput(
-                          onChange: (key) {
-                            _debouncer
-                                .run(() => getNearbyShopList(keyword: key));
-                          },
-                          defaultBorderColor: Colors.grey,
-                          isAutoFocus: true,
-                        ),
-                        ListView.separated(
+            child: Container(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  SearchBarInput(
+                    onChange: (key) {
+                      _debouncer.run(() => getNearbyShopList(keyword: key));
+                    },
+                    defaultBorderColor: Colors.grey,
+                    isAutoFocus: true,
+                  ),
+                  _shops != null && _shops.length > 0
+                      ? ListView.separated(
                           separatorBuilder: (context, index) => Divider(),
                           physics: NeverScrollableScrollPhysics(),
                           shrinkWrap: true,
@@ -127,15 +126,15 @@ class _ShopListPageState extends State<ShopListPage> {
                             );
                           },
                         )
-                      ],
-                    ),
-                  )
-                : Container(
-                    height: MediaQuery.of(context).size.height - 200,
-                    child: Center(
-                        child: Text(AppTranslations.of(context)
-                            .text('no_shop_available'))),
-                  ),
+                      : Container(
+                          height: MediaQuery.of(context).size.height - 200,
+                          child: Center(
+                              child: Text(AppTranslations.of(context)
+                                  .text('no_shop_available'))),
+                        ),
+                ],
+              ),
+            ),
           ),
         ),
       ),

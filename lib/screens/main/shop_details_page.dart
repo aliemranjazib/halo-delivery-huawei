@@ -98,9 +98,8 @@ class _ShopDetailsPageState extends State<ShopDetailsPage> {
 
     _huaweiMarkers.clear();
 
-    final marker = huaweiMap.Marker(
-        markerId: huaweiMap.MarkerId('marker'),
-        position: _huaweiInitialPosition);
+    final marker =
+    huaweiMap.Marker(markerId: huaweiMap.MarkerId('marker'), position: _huaweiInitialPosition);
 
     _huaweiMarkers.add(marker);
 

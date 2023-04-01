@@ -2,11 +2,8 @@ import 'dart:async';
 import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
-import 'package:data_connection_checker/data_connection_checker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-// import 'package:geolocator/geolocator.dart';
 
 import 'package:haloapp/components/custom_flushbar.dart';
 import 'package:haloapp/components_new/banner_slider.dart';
@@ -39,7 +36,6 @@ import 'package:haloapp/screens/food/food_main_page.dart';
 import 'package:haloapp/screens/general/find_address_page.dart';
 import 'package:haloapp/screens/general/language_selector_page.dart';
 import 'package:haloapp/screens/main/food_history_details_page.dart';
-import 'package:haloapp/screens/main/food_main_page.dart';
 import 'package:haloapp/screens/main/shop_list_page.dart';
 import 'package:haloapp/screens/main/shop_menu_page.dart';
 import 'package:haloapp/screens/main/update_server_update.dart';
@@ -55,7 +51,8 @@ import 'package:haloapp/utils/services/pop_with_result_service.dart';
 import 'package:haloapp/utils/services/shared_pref_service.dart';
 import 'package:haloapp/utils/utils.dart';
 import 'package:haloapp/widget/measure_size_widget.dart';
-import 'package:huawei_location/location/location.dart';
+// import 'package:huawei_location/location/location.dart';
+import 'package:huawei_location/huawei_location.dart';
 import 'package:uni_links/uni_links.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -80,7 +77,6 @@ class _HomePageState extends State<HomePage> {
 
   // double coreServiceHeight = 100.0;
   List<ShopModel> _shops = [];
-  List<ShopModel> _promoteItem = [];
   List<FoodHistoryModel> _foodHistories = [];
   FoodHistoryModel _onGoingFood;
 
@@ -91,7 +87,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     init();
-
     WidgetsBinding.instance.addObserver(LifecycleEventHandler(
       resumeCallBack: () async {
         // if (User().getAuthToken() != null){
@@ -138,8 +133,7 @@ class _HomePageState extends State<HomePage> {
         initiateLanguage(),
         if (User().getAuthToken() != null) loadNearbyAddress(),
         loadHomeInfo(),
-        loadFoodHistory(),
-        getNearbyPromoItem()
+        loadFoodHistory()
       ]);
     } else {
       await Navigator.pushNamed(context, LocationPage.id);
@@ -193,15 +187,11 @@ class _HomePageState extends State<HomePage> {
           }
         });
       } catch (e) {
-        if (mounted) {
-          showSimpleFlushBar(e.toString(), context);
-        }
+        showSimpleFlushBar(e, context);
       } finally {
-        if (mounted) {
-          setState(() {
-            _showSpinner = false;
-          });
-        }
+        setState(() {
+          _showSpinner = false;
+        });
       }
     }
   }
@@ -212,11 +202,9 @@ class _HomePageState extends State<HomePage> {
     var language = Application.languagesMap.keys.firstWhere(
         (k) => Application.languagesMap[k] == languageCode,
         orElse: () => null);
-    if (mounted) {
-      setState(() {
-        _selectedLanguageCode = language != null ? language : languageCode;
-      });
-    }
+    setState(() {
+      _selectedLanguageCode = language != null ? language : languageCode;
+    });
   }
 
   void _handleIncomingLinks() {
@@ -356,62 +344,15 @@ class _HomePageState extends State<HomePage> {
       });
     } catch (e) {
       print(e.toString());
-      if (mounted) {
-        showSimpleFlushBar(e.toString(), context);
-      }
+      showSimpleFlushBar(e.toString(), context);
     } finally {
-      if (mounted) {
-        setState(() {
-          _showSpinner = false;
-        });
-      }
-    }
-  }
-
-  Future<void> getNearbyPromoItem() async {
-    print('getSHOP at home:');
-    // print(FoodOrderModel().getDeliveryAddress()..lat);
-    // print(FoodOrderModel().getDeliveryAddress()..lng);
-    Map<String, dynamic> params = {
-      "apiKey": APIUrls().getFoodApiKey(),
-      "data": {
-        "lat": FoodOrderModel().getDeliveryAddress() != null
-            ? FoodOrderModel().getDeliveryAddress().lat
-            : 0.0,
-        "lng": FoodOrderModel().getDeliveryAddress() != null
-            ? FoodOrderModel().getDeliveryAddress().lng
-            : 0.0,
-      }
-    };
-    print(params);
-
-    // setState(() {
-    //   _showSpinner = true;
-    // });
-
-    try {
-      var data = await FoodNetworking().getNearbyPromoteItem(params);
-      // if(data.length == 0) return;
-      // if(data.length <= 0) return;
       setState(() {
-        _promoteItem = data;
+        _showSpinner = false;
       });
-    } catch (e) {
-      // print(e.toString());
-      if (mounted) {
-        showSimpleFlushBar(e.toString(), context);
-      }
-    } finally {
-      if (mounted) {
-        setState(() {
-          _showSpinner = false;
-        });
-      }
     }
   }
 
   _serviceBtnPressed(String service) {
-    // print("3333${service}");
     switch (service) {
       case 'express':
         Navigator.pushNamed(context, DeliveryMainPage.id).then((results) {
@@ -426,7 +367,6 @@ class _HomePageState extends State<HomePage> {
           }
         });
         break;
-
       default:
         FoodOption foodOption = FoodOption(searchName: "", shopType: service);
         FoodOrderModel().foodOption = foodOption;
@@ -471,15 +411,11 @@ class _HomePageState extends State<HomePage> {
       });
     } catch (e) {
       print(e.toString());
-      if (mounted) {
-        showSimpleFlushBar(e.toString(), context);
-      }
+      showSimpleFlushBar(e, context);
     } finally {
-      if (mounted) {
-        setState(() {
-          _showSpinner = false;
-        });
-      }
+      setState(() {
+        _showSpinner = false;
+      });
     }
   }
 
@@ -491,6 +427,9 @@ class _HomePageState extends State<HomePage> {
               if (position != null && position.latitude != null) ...{
                 'lat': position.latitude.toString(),
                 'lng': position.longitude.toString()
+              } else ...{
+                'lat': "0.0",
+                'lng': "0.0"
               }
             }
           }))['addresses'] ??
@@ -540,7 +479,6 @@ class _HomePageState extends State<HomePage> {
       }
     }
 
-    //getNearbyPromoItem();
     getNearbyShopList();
     if (mounted) {
       setState(() {});
@@ -774,11 +712,9 @@ class _HomePageState extends State<HomePage> {
                                       });
 
                                     await getNearbyShopList();
-                                    if (mounted) {
-                                      setState(() {
-                                        _showSpinner = false;
-                                      });
-                                    }
+                                    setState(() {
+                                      _showSpinner = false;
+                                    });
                                     // editAddress();
                                   },
                                   child: ValueListenableBuilder<AddressModel>(
@@ -896,14 +832,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget getWidget() {
-    List<Widget> widgets = [];
+    List<Widget> widgets = List();
 
     for (var i = 0; i < AppConfig.consumerConfig.servicesPos.length; i++) {
       switch (AppConfig.consumerConfig.servicesPos[i]) {
         case "craving":
           if (AppConfig.foodOptions != null &&
               AppConfig.foodOptions.length > 0) {
-            // what are you craving for
             widgets.add(Container(
               margin: EdgeInsets.only(top: 5),
               child: FoodTypeContainer(
@@ -952,58 +887,6 @@ class _HomePageState extends State<HomePage> {
                             builder: (context) => ShopMenuPage(
                               shopUniqueCode: _shops[index].uniqueCode,
                               shopInfo: _shops[index],
-                            ),
-                          ),
-                        );
-                      },
-                    ),
-                    separatorBuilder: (BuildContext context, int index) {
-                      return Container(
-                        width: 6.0,
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ));
-          }
-          break;
-
-        case "promo_item":
-          if (_promoteItem != null && _promoteItem.length > 0) {
-            widgets.add(Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 10),
-                Container(
-                  padding: EdgeInsets.only(left: 10.0, bottom: 6.0),
-                  child: Text(AppTranslations.of(context).text('super_jimat'),
-                      style: kTitleBoldTextStyle),
-                ),
-                Container(
-                  padding: EdgeInsets.only(top: 10.0),
-                  height: 90.0 + 60.0,
-                  child: ListView.separated(
-                    padding: EdgeInsets.only(left: 16.0, right: 16.0),
-                    physics: BouncingScrollPhysics(),
-                    shrinkWrap: true,
-                    scrollDirection: Axis.horizontal,
-                    itemCount: _promoteItem.length,
-                    itemBuilder: (BuildContext context, int index) =>
-                        HorizontalMerchantCard2(
-                      headerImgUrl: _promoteItem[index].headerImgUrl,
-                      logoUrl: _promoteItem[index].logoUrl,
-                      shopInfo: _promoteItem[index],
-                      cardHeight: 90.0,
-                      cardWidth: 90.0,
-                      isHideShowFeatureTag: true,
-                      onClick: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => ShopMenuPage(
-                              shopUniqueCode: _promoteItem[index].uniqueCode,
-                              shopInfo: _promoteItem[index],
                             ),
                           ),
                         );

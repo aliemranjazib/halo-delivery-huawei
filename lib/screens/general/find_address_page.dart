@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-// import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:haloapp/components/action_button.dart';
 import 'package:haloapp/components/custom_flushbar.dart';
 import 'package:haloapp/components/model_progress_hud.dart';
@@ -11,7 +10,6 @@ import 'package:haloapp/models/user_model.dart';
 import 'package:haloapp/networkings/user_networking.dart';
 import 'package:haloapp/screens/food/food_main_page.dart';
 import 'package:haloapp/screens/general/save_address_page.dart';
-import 'package:haloapp/screens/main/food_main_page.dart';
 import 'package:haloapp/utils/app_translations/app_translations.dart';
 import 'package:haloapp/utils/constants/custom_colors.dart';
 import 'package:haloapp/utils/constants/fonts.dart';
@@ -19,7 +17,7 @@ import 'package:haloapp/utils/debouncer.dart';
 import 'package:haloapp/utils/services/google_map_places_service.dart';
 import "package:google_maps_webservice/places.dart";
 import 'package:haloapp/utils/services/location_service.dart';
-import 'package:huawei_map/components/latLng.dart';
+import 'package:huawei_map/map.dart' as huaweiMap;
 
 class FindAddressPage extends StatefulWidget {
   static const String id = '/findAddress';
@@ -288,11 +286,10 @@ class _FindAddressPageState extends State<FindAddressPage> {
                               return;
                             }
 
-                            position =
-                                await LocationService.getLastKnownLocation();
+                            position = await LocationService.getLastKnownLocation();
 
                             var aa = await GoogleMapPlacesService()
-                                .getPlaceComponentByLocation(LatLng(
+                                .getPlaceComponentByLocation(huaweiMap.LatLng(
                                     position.latitude, position.longitude));
                             print('end');
                             _customAddressController.text = aa['fullAddress'];

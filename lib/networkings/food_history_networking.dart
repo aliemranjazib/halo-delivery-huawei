@@ -17,12 +17,10 @@ class FoodHistoryNetworking {
 
     String data = await response.transform(utf8.decoder).join();
     var decodedData = jsonDecode(data);
-    // print(decodedData);
+    print(decodedData);
 
     if (response.statusCode == 200) {
-      List<FoodHistoryModel> orders =
-          _delegateHistoryOrderData(decodedData['response']);
-
+      List<FoodHistoryModel> orders = _delegateHistoryOrderData(decodedData['response']);
       return orders;
     } else if (response.statusCode == 400) {
       return [];
@@ -121,6 +119,7 @@ class FoodHistoryNetworking {
       Map<String, dynamic> responseData) {
     Map<String, dynamic> order = responseData['orders'];
 
+    // print("_delegateHistoryOrderDetailsData -- ${order}");
     List<FoodOrderCart> orderItems = _delegateOrderDetails(order['orderItems']);
 
     order['order_items'] = orderItems;
@@ -209,8 +208,7 @@ class FoodHistoryNetworking {
     print(decodedData);
 
     if (response.statusCode == 200) {
-      Map<String, dynamic> calculateUpdatePaymentModel =
-          decodedData['response'];
+      Map<String, dynamic> calculateUpdatePaymentModel = decodedData['response'];
       return CalculateUpdatePaymentModel.fromJson(calculateUpdatePaymentModel);
       if (decodedData['status_code'] == 514) {
         // TODO: expired token, re-login
@@ -218,8 +216,7 @@ class FoodHistoryNetworking {
       } else if (decodedData['status_code'] == 400) {
         throw decodedData['msg'] ?? '';
       } else {
-        return CalculateUpdatePaymentModel.fromJson(decodedData['response']) ??
-            '';
+        return CalculateUpdatePaymentModel.fromJson(decodedData['response']) ?? '';
       }
     } else {
       print('rateOrder Failed: ' + decodedData['msg']);
@@ -251,4 +248,6 @@ class FoodHistoryNetworking {
       throw decodedData['msg'] ?? '';
     }
   }
+
 }
+

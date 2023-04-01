@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-// import 'package:geolocator/geolocator.dart';
 import 'package:haloapp/components/custom_flushbar.dart';
 import 'package:haloapp/models/app_config_model.dart';
 import 'package:haloapp/models/shop_model.dart';
@@ -33,8 +33,6 @@ import 'package:haloapp/screens/main/ewallet_top_up_page.dart';
 import 'package:haloapp/screens/main/notification_details_page.dart';
 import 'package:haloapp/screens/main/notification_list_page.dart';
 import 'package:haloapp/screens/main/activity_support_page.dart';
-import 'package:haloapp/screens/main/points/points_page.dart';
-import 'package:haloapp/screens/main/points/redeem_points_page.dart';
 import 'package:haloapp/screens/main/referral_details_page.dart';
 import 'package:haloapp/screens/main/referral_page.dart';
 import 'package:haloapp/screens/main/shop_menu_page.dart';
@@ -63,10 +61,17 @@ import 'package:haloapp/screens/general/support_page.dart';
 import 'package:haloapp/utils/app_translations/app_translations_delegate.dart';
 import 'package:haloapp/utils/app_translations/application.dart';
 import 'package:haloapp/utils/constants/api_urls.dart';
+import 'package:haloapp/utils/constants/custom_colors.dart';
+import 'package:haloapp/utils/services/push_notifications.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:haloapp/utils/services/shared_pref_service.dart';
+
 import 'package:haloapp/utils/services/location_service.dart';
 import 'package:haloapp/utils/services/push_notifications.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:haloapp/utils/services/shared_pref_service.dart';
+
+import 'package:haloapp/screens/main/home_page.dart';
 import 'package:haloapp/screens/main/shop_list_page.dart';
 import 'package:haloapp/screens/main/delivery_main_page.dart';
 import 'package:haloapp/screens/main/add_address_page.dart';
@@ -80,14 +85,10 @@ import 'package:haloapp/screens/main/language_selector_page.dart';
 import 'package:haloapp/screens/main/change_profile_page.dart';
 import 'package:haloapp/screens/main/delivery_history_page.dart';
 import 'package:haloapp/screens/main/delivery_history_details_page.dart';
-import 'package:huawei_location/permission/permission_handler.dart';
-import 'package:uni_links/uni_links.dart';
 import 'package:huawei_push/huawei_push.dart';
+import 'package:uni_links/uni_links.dart';
 
 import 'models/food_model.dart';
-import 'screens/main/home_page_new.dart';
-
-/////  26 march
 
 final FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin =
     FlutterLocalNotificationsPlugin();
@@ -123,8 +124,7 @@ void main() async {
   // Crashlytics.instance.enableInDevMode = true;
   // Pass all uncaught errors from the framework to Crashlytics.
 //  FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  SystemChrome.setSystemUIOverlayStyle(
-      SystemUiOverlayStyle(statusBarColor: Colors.transparent));
+
   runApp(MyApp());
 }
 
@@ -137,6 +137,15 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  static void backgroundMessageCallback(RemoteMessage remoteMessage) async {
+    String data = remoteMessage.data;
+
+    Push.localNotification({
+      HMSLocalNotificationAttr.TITLE: '[Headless] DataMessage Received',
+      HMSLocalNotificationAttr.MESSAGE: data
+    });
+  }
+
   Uri _initialUri;
   Uri _latestUri;
   Object _err;
@@ -151,30 +160,22 @@ class _MyAppState extends State<MyApp> {
   //     HMSLocalNotificationAttr.MESSAGE: data
   //   });
   // }
-  static void backgroundMessageCallback(RemoteMessage remoteMessage) async {
-    String data = remoteMessage.data;
-
-    Push.localNotification({
-      HMSLocalNotificationAttr.TITLE: '[Headless] DataMessage Received',
-      HMSLocalNotificationAttr.MESSAGE: data
-    });
-  }
 
   @override
   void initState() {
     super.initState();
+    //WidgetsBinding.instance.addPostFrameCallback((_) => _handleIncomingLinks());
     application.localeDelegate = AppTranslationsDelegate(newLocale: null);
     application.onLocaleChanged = onLocaleChange;
     initiateLanguage();
     checkPermission();
-    _handleInitialUri();
+    _handleInitialUri(context);
     //_handleIncomingLinks();
     //_handleInitialUri();
-    if (Platform.isAndroid) {
-      Push.registerBackgroundMessageHandler(backgroundMessageCallback);
-      initPlatformState();
-      getToken();
-    }
+
+    Push.registerBackgroundMessageHandler(backgroundMessageCallback);
+    initPlatformState();
+    getToken();
   }
 
   void _onTokenEvent(String event) {
@@ -197,18 +198,15 @@ class _MyAppState extends State<MyApp> {
 
   void getToken() async {
     // Call this method to request for a token
-    var token = Push.getToken('HCM');
+    Push.getToken('HCM');
   }
 
   void checkPermission() async {
-    // bool locationPermissionGranted = await LocationService().checkPermission();
-    final PermissionHandler _permissionHandler = PermissionHandler();
-    await _permissionHandler.requestLocationPermission();
+    bool locationPermissionGranted = await LocationService().checkPermission();
 
-    // if (!locationPermissionGranted) {
-    //   await _permissionHandler.requestLocationPermission();
-    //   Navigator.pushNamed(context, LocationPage.id);
-    // }
+    if (!locationPermissionGranted) {
+      Navigator.pushNamed(context, LocationPage.id);
+    }
   }
 
   void _handleIncomingLinks() {
@@ -239,7 +237,7 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
-  Future<void> _handleInitialUri() async {
+  Future<void> _handleInitialUri(BuildContext context) async {
     print('_handleIncomingLinks###############');
     // In this example app this is an almost useless guard, but it is here to
     // show we are not going to call getInitialUri multiple times, even if this
@@ -398,12 +396,8 @@ class _MyAppState extends State<MyApp> {
         ReferralsPage.id: (context) => ReferralsPage(),
         ReferralsDetailPage.id: (context) => ReferralsDetailPage(),
         ChangePhonePage.id: (context) => ChangePhonePage(),
-        PointsPage.id: (context) => PointsPage(),
         ChangePhoneVerificationPage.id: (context) =>
-            ChangePhoneVerificationPage(),
-//// new
-
-        RedeemPointsPage.id: (context) => RedeemPointsPage(),
+            ChangePhoneVerificationPage()
       },
       localizationsDelegates: [
         application.localeDelegate,

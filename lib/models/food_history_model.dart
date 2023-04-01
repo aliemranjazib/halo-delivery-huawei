@@ -33,6 +33,7 @@ class FoodHistoryModel {
   String shopLogoUrl;
   String shopLat;
   String shopLng;
+  bool shopPartner;
   int shopDeliveryInterval;
   String customerLat;
   String customerLng;
@@ -40,7 +41,6 @@ class FoodHistoryModel {
   String street;
   String userName;
   String userPhone;
-  String orderType;
   String refundAvailableStatus;
   String payAgainStatus;
   String bookingRefundStatus;
@@ -54,7 +54,6 @@ class FoodHistoryModel {
   FoodHistoryModel(
       {this.id,
       this.orderNum,
-      this.orderType,
       this.orderUniqueKey,
       this.orderPrice,
       this.orderPriceOri,
@@ -86,7 +85,8 @@ class FoodHistoryModel {
       this.shopLat,
       this.shopLng,
       this.shopDeliveryInterval,
-      this.customerLat,
+        this.shopPartner,
+        this.customerLat,
       this.customerLng,
       this.orderItems,
       this.street,
@@ -107,7 +107,6 @@ class FoodHistoryModel {
     return FoodHistoryModel(
         id: order['order_id'] ?? '',
         orderNum: order['order_number'] ?? '',
-        orderType: order['order_type'] ?? '',
         orderUniqueKey: order['order_unique_key'] ?? '',
         orderPrice: order['order_price'] ?? '',
         orderPriceOri: order['order_price_ori'] ?? '',
@@ -140,6 +139,7 @@ class FoodHistoryModel {
         shopLng: order['shop_lng'] ?? '',
         shopDeliveryInterval:
             int.tryParse(order['shop_delivery_interval']) ?? 0,
+        shopPartner: order['shop_partner'] == "true",
         customerLat: order['lat'] ?? '',
         customerLng: order['lng'] ?? '',
         orderItems: order['order_items'],
@@ -169,7 +169,7 @@ class FoodHistoryModel {
             ? ''
             : order['booking_refund_receipt_url'],
         customerPayRiderCash: order['customerPayRiderCash'] ?? '',
-        orderMerchantRemark: order['order_merchant_remarks'] == null
+        orderMerchantRemark : order['order_merchant_remarks'] == null
             ? ''
             : order['order_merchant_remarks']);
   }

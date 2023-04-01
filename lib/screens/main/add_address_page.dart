@@ -24,7 +24,7 @@ import '../../components/custom_flushbar.dart';
 import '../../components/remarks_textbox.dart';
 import '../../utils/services/location_service.dart';
 import 'package:huawei_map/map.dart' as huaweiMap;
-import 'package:huawei_location/location/location.dart' as huaweiLocation;
+import 'package:huawei_location/huawei_location.dart' as huaweiLocation;
 
 class AddAddressPage extends StatefulWidget {
   static const String id = 'addAddressPage';

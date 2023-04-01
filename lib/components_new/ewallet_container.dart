@@ -90,11 +90,8 @@ class EwalletContainer extends StatelessWidget {
   String getTotalAmount() {
     if (User().walletTransactionsResponse != null) {
       try {
-        return Utils.getFormattedPrice(double.parse(User()
-            .walletTransactionsResponse
-            .response
-            .walletBalance
-            .replaceAll(",", "")));
+        return Utils.getFormattedPrice(double.tryParse(
+            User().walletTransactionsResponse.response.walletBalance));
       } catch (e) {
         print(e);
       }
