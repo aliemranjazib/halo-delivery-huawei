@@ -1,0 +1,141 @@
+{
+  "msg": "Get config Success",
+  "response": {
+    "enabled_options": [
+      "food",
+      "grocery",
+      "pharmacy",
+      "frozen",
+      "express"
+    ],
+    "icon_list": [
+      {
+        "icon_name": "food",
+        "icon_url": "https://halorider.oss-ap-southeast-3.aliyuncs.com/home_icon/food.png"
+      },
+      {
+        "icon_name": "grocery",
+        "icon_url": "https://halorider.oss-ap-southeast-3.aliyuncs.com/home_icon/grocery.png"
+      },
+      {
+        "icon_name": "pharmacy",
+        "icon_url": "https://halorider.oss-ap-southeast-3.aliyuncs.com/home_icon/pharmacy.png"
+      },
+      {
+        "icon_name": "frozen",
+        "icon_url": "https://halorider.oss-ap-southeast-3.aliyuncs.com/home_icon/frozen.png"
+      },
+      {
+        "icon_name": "express",
+        "icon_url": "https://halorider.oss-ap-southeast-3.aliyuncs.com/home_icon/delivery.png"
+      }
+    ],
+    "language": [
+      {
+        "code": "en",
+        "name": "English",
+        "file": "https://userapi.halo.express/app-language-file/localization_en.json"
+      },
+      {
+        "code": "ms",
+        "name": "Bahasa",
+        "file": "https://userapi.halo.express/app-language-file/localization_ms.json"
+      },
+      {
+        "code": "zh",
+        "name": "华语",
+        "file": "https://userapi.halo.express/app-language-file/localization_zh.json"
+      }
+    ],
+    "operatingTime": [],
+    "appSetting": {
+      "isConfirmOrderDelay": true,
+      "isConfirmOrderDelayTime": 5000,
+      "isMaintenance": false,
+      "highlightCategory": [
+        "Non-Halal"
+      ],
+      "eWalletEnable": false,
+      "topUpMinAmount": 10,
+      "topUpMaxAmount": 100,
+      "topUpAmount": [
+        10,
+        30,
+        50,
+        100
+      ],
+      "supportUrl": "fb-messenger://user-thread/155381338364130",
+      "supportUrlBackup": "https://m.me/halo.com.my",
+      "servicesPos": [
+        "craving",
+        "featured",
+        "order_again",
+        "mynews"
+      ]
+    },
+    "news": [],
+    "order_again": [],
+    "craving_for": [
+      {
+        "icon_name": "Local",
+        "icon_url": "https://halorider.oss-ap-southeast-3.aliyuncs.com/mainIcon/rice-2.png?x-oss-process=image/resize,h_400,m_lfit",
+        "search_name": "Local",
+        "shop_type": "food"
+      },
+      {
+        "icon_name": "Noodles",
+        "icon_url": "https://halorider.oss-ap-southeast-3.aliyuncs.com/mainIcon/noodles.png?x-oss-process=image/resize,h_400,m_lfit",
+        "search_name": "Noodles",
+        "shop_type": "food"
+      },
+      {
+        "icon_name": "Asian",
+        "icon_url": "https://halorider.oss-ap-southeast-3.aliyuncs.com/mainIcon/asian.png?x-oss-process=image/resize,h_400,m_lfit",
+        "search_name": "Asian",
+        "shop_type": "food"
+      },
+      {
+        "icon_name": "Western",
+        "icon_url": "https://halorider.oss-ap-southeast-3.aliyuncs.com/mainIcon/western.png?x-oss-process=image/resize,h_400,m_lfit",
+        "search_name": "Western",
+        "shop_type": "food"
+      },
+      {
+        "icon_name": "Beverages",
+        "icon_url": "https://halorider.oss-ap-southeast-3.aliyuncs.com/mainIcon/bubble-tea.png?x-oss-process=image/resize,h_400,m_lfit",
+        "search_name": "Beverages",
+        "shop_type": "food"
+      },
+      {
+        "icon_name": "Healthy Food",
+        "icon_url": "https://halorider.oss-ap-southeast-3.aliyuncs.com/mainIcon/vegetarian.png?x-oss-process=image/resize,h_400,m_lfit",
+        "search_name": "Healthy Food",
+        "shop_type": "food"
+      },
+      {
+        "icon_name": "Burgers",
+        "icon_url": "https://halorider.oss-ap-southeast-3.aliyuncs.com/mainIcon/burger.png?x-oss-process=image/resize,h_400,m_lfit",
+        "search_name": "Burgers",
+        "shop_type": "food"
+      },
+      {
+        "icon_name": "Cakes",
+        "icon_url": "https://halorider.oss-ap-southeast-3.aliyuncs.com/mainIcon/cake-slice.png?x-oss-process=image/resize,h_400,m_lfit",
+        "search_name": "Cakes",
+        "shop_type": "food"
+      },
+      {
+        "icon_name": "Dessert",
+        "icon_url": "https://halorider.oss-ap-southeast-3.aliyuncs.com/mainIcon/sweets.png?x-oss-process=image/resize,h_400,m_lfit",
+        "search_name": "Dessert",
+        "shop_type": "food"
+      },
+      {
+        "icon_name": "Fast Food",
+        "icon_url": "https://halorider.oss-ap-southeast-3.aliyuncs.com/mainIcon/fast-food.png?x-oss-process=image/resize,h_400,m_lfit",
+        "search_name": "Fast Food",
+        "shop_type": "food"
+      }
+    ]
+  }
+}

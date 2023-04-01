@@ -1,0 +1,127 @@
+{
+  "project_info": {
+    "project_number": "905459932446",
+    "firebase_url": "https://halo-rider.firebaseio.com",
+    "project_id": "halo-rider",
+    "storage_bucket": "halo-rider.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905459932446:android:ff1408dcbd196d6596fd0f",
+        "android_client_info": {
+          "package_name": "com.halo.halo_merchant"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "905459932446-7tf46aioutftuh64bc5o8rt9dbpcpupv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9bLZXOkJN5NWPKq7MaLnXVi5tub1a_mc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "905459932446-7tf46aioutftuh64bc5o8rt9dbpcpupv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "905459932446-k47bf4r1u98uugpq4imnkue31f03fkbe.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.halo.halomerchant"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905459932446:android:a6f4cdf6ba23767c96fd0f",
+        "android_client_info": {
+          "package_name": "com.halo.haloexpress"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "905459932446-snj7uclr15eq67ojqp06m67pmsemer8m.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.halo.haloexpress",
+            "certificate_hash": "f3867c73095322f73486dd528784202b6cf05485"
+          }
+        },
+        {
+          "client_id": "905459932446-7tf46aioutftuh64bc5o8rt9dbpcpupv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9bLZXOkJN5NWPKq7MaLnXVi5tub1a_mc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "905459932446-7tf46aioutftuh64bc5o8rt9dbpcpupv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "905459932446-k47bf4r1u98uugpq4imnkue31f03fkbe.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.halo.halomerchant"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:905459932446:android:88d9f1807bd0d70396fd0f",
+        "android_client_info": {
+          "package_name": "com.halo.halorider"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "905459932446-7tf46aioutftuh64bc5o8rt9dbpcpupv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC9bLZXOkJN5NWPKq7MaLnXVi5tub1a_mc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "905459932446-7tf46aioutftuh64bc5o8rt9dbpcpupv.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "905459932446-k47bf4r1u98uugpq4imnkue31f03fkbe.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.halo.halomerchant"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

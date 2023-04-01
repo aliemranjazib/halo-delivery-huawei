@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>905459932446-nnmbvckrhka4b4eibcpco5k8abmprch6.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.905459932446-nnmbvckrhka4b4eibcpco5k8abmprch6</string>
+	<key>API_KEY</key>
+	<string>AIzaSyBaU0xXJuBTO-4WqAAB0r3V4mITR-nADCA</string>
+	<key>GCM_SENDER_ID</key>
+	<string>905459932446</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.halo.haloexpress</string>
+	<key>PROJECT_ID</key>
+	<string>halo-rider</string>
+	<key>STORAGE_BUCKET</key>
+	<string>halo-rider.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:905459932446:ios:044589695470d7be96fd0f</string>
+	<key>DATABASE_URL</key>
+	<string>https://halo-rider.firebaseio.com</string>
+</dict>
+</plist>
